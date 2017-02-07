@@ -1,4 +1,4 @@
-package eu.geoc.application;
+package eu.geoc.application.services;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;

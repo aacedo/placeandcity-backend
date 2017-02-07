@@ -1,4 +1,4 @@
-package eu.geoc.application;
+package eu.geoc.application.persistence;
 
 /**
  * Copyright (C) 2016 Geotec. All right reserved.

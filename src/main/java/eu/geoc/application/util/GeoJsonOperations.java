@@ -1,4 +1,4 @@
-package eu.geoc.application;
+package eu.geoc.application.util;
 
 import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.fasterxml.jackson.databind.ObjectMapper;

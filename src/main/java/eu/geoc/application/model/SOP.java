@@ -1,4 +1,6 @@
-package eu.geoc.application;
+package eu.geoc.application.model;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -8,26 +10,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement
-public class SOP {
-    private String layer;
+public class SOP extends Factor {
     private SOPPredictors predictors;
     private SOPDimensions dimensions;
 
     public SOP() {
+        super();
     }
 
     public SOP(String layer, SOPPredictors predictors, SOPDimensions dimensions) {
-        this.layer = layer;
+        super(layer);
         this.predictors = predictors;
         this.dimensions = dimensions;
-    }
-
-    public String getLayer() {
-        return layer;
-    }
-
-    public void setLayer(String layer) {
-        this.layer = layer;
     }
 
     public SOPPredictors getPredictors() {

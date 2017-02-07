@@ -1,4 +1,4 @@
-package eu.geoc.application;
+package eu.geoc.application.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
@@ -6,8 +6,6 @@ import java.util.List;
 /**
  * Created by albertacedosanchez on 18/1/17.
  */
-
-
 
 @XmlRootElement
 public class FirstData {

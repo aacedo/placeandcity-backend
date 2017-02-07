@@ -1,4 +1,4 @@
-package eu.geoc.application;
+package eu.geoc.application.persistence;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
@@ -6,21 +6,28 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
-import com.mongodb.client.result.DeleteResult;
+import eu.geoc.application.model.Factor;
+import eu.geoc.application.model.FactorList;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.Vector;
+
+import static eu.geoc.application.persistence.FPGsonBuilder.*;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class MongoDatabaseManager {
+
+	private final static String SOPFieldName = "SOP";
+	private final static String SCFieldName = "SC";
+	private final static String CEFieldName = "CE";
+
 	private MongoDatabase database;
 	private MongoClient mongoClient;
-	private boolean connected = false; 
+	private boolean connected = false;
 
 	public static class MongoDBManagerConfig {
 		public String server;
@@ -71,7 +78,7 @@ public class MongoDatabaseManager {
 			this.connected = false;
 		}
 	}
-	
+
 	public boolean isConnected(){
 		return this.connected;
 	}
@@ -87,8 +94,8 @@ public class MongoDatabaseManager {
 
 		MongoCollection<Document> collection = this.database.getCollection(collectionName);
 		MongoCursor<Document> cursor = (filter == null)?
-			collection.find().projection(Projections.excludeId()).iterator():
-			collection.find(filter).projection(Projections.excludeId()).iterator();
+				collection.find().projection(Projections.excludeId()).iterator():
+				collection.find(filter).projection(Projections.excludeId()).iterator();
 
 		while(cursor.hasNext()){
 			Document doc = cursor.next();
@@ -123,23 +130,48 @@ public class MongoDatabaseManager {
 		return doc.getObjectId("_id");
 	}
 
-	public SOPList getDocSOPList(String id, String fieldName){
+	public String getDocField(String id, String fieldName){
 		List<String> records = getRecords(mainCollection, new Document("_id", new ObjectId(id)));
 		Document doc = Document.parse(records.get(0));
-		Document sopDoc = (Document)(doc.get(fieldName));
-		Gson gson = new Gson();
-		SOPList list = gson.fromJson(sopDoc.toJson(), SOPList.class);
-		return list;
+		Document sopDoc = Document.parse(doc.get(fieldName).toString());
+		return sopDoc.toJson();
 	}
 
-	public List<String> getSOPLayersFromSurvey(String id){
-		List<String> sopLayers = new ArrayList<>();
-		SOPList sopList = getDocSOPList(id, "SOP");
-		for (SOP sop : sopList.getSops()) {
-			sopLayers.add(sop.getLayer());
+	public  List<String> getLayersFromSurvey(String id, String fieldName){
+		List<String> factorLayers = new ArrayList<>();
+		Gson gson = getNewGson();
+		String factorListString = getDocField(id, fieldName);
+		FactorList factorList = gson.fromJson(factorListString, FactorList.class);
+		for (Factor factor : factorList.getFactors()) {
+			factorLayers.add(factor.getLayer());
 		}
-		return sopLayers;
+		return factorLayers;
+	}
+
+	public ObjectId addSOPData(FactorList data){
+		String json = getNewGson().toJson(data);
+		return updateRecord(data.getId(), SOPFieldName, json);
+	}
+
+	public ObjectId addSCData(FactorList data){
+		String json = getNewGson().toJson(data);
+		return updateRecord(data.getId(), SCFieldName, json);
+	}
+
+	public ObjectId addCEData(FactorList data){
+		String json = getNewGson().toJson(data);
+		return updateRecord(data.getId(), CEFieldName, json);
+	}
+
+	public  List<String> getSOPLayersFromSurvey(String id) {
+		return getLayersFromSurvey(id, SOPFieldName);
+	}
+
+	public  List<String> getSCLayersFromSurvey(String id) {
+		return getLayersFromSurvey(id, SCFieldName);
+	}
+
+	public  List<String> getCELayersFromSurvey(String id) {
+		return getLayersFromSurvey(id, CEFieldName);
 	}
 }
-
-
