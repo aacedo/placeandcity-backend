@@ -3,6 +3,7 @@ package eu.geoc.application.services;
 import com.google.gson.Gson;
 import eu.geoc.application.model.FactorList;
 import eu.geoc.application.model.FirstData;
+import eu.geoc.application.model.UserDetails;
 import eu.geoc.application.persistence.MongoDatabaseManager;
 import eu.geoc.application.persistence.PersistenceBuilder;
 import eu.geoc.application.services.model.IdResult;
@@ -150,6 +151,21 @@ public class ManagementServices {
 		}
 	}
 
+	@POST
+	@Path("finish")
+	public IdResult finish(String userDetailsString) {
+		try {
+			slotDB.connect();
+			UserDetails userDetails = getNewGson().fromJson(userDetailsString, UserDetails.class);		// Verification
+			ObjectId id = slotDB.addUserDetails(userDetails);
+			slotDB.disconnect();
+			return new IdResult(userDetails.getId());
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return new IdResult("0");
+		}
+	}
 
 	//region Commented to be used as example
 	/*@POST

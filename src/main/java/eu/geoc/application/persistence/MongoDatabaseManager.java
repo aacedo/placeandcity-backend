@@ -8,6 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
 import eu.geoc.application.model.Factor;
 import eu.geoc.application.model.FactorList;
+import eu.geoc.application.model.UserDetails;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -130,6 +131,16 @@ public class MongoDatabaseManager {
 		return doc.getObjectId("_id");
 	}
 
+	public ObjectId mergeAndUpdateRecord(String id, String data){
+		List<String> records = getRecords(mainCollection, new Document("_id", new ObjectId(id)));
+		Document doc = Document.parse(records.get(0));
+		Document parsed = Document.parse(data);
+		doc.putAll(parsed);
+		MongoCollection<Document> collection = this.database.getCollection(mainCollection);
+		Document id1 = collection.findOneAndReplace(eq("_id", new ObjectId(id)), doc);
+		return doc.getObjectId("_id");
+	}
+
 	public String getDocField(String id, String fieldName){
 		List<String> records = getRecords(mainCollection, new Document("_id", new ObjectId(id)));
 		Document doc = Document.parse(records.get(0));
@@ -173,5 +184,9 @@ public class MongoDatabaseManager {
 
 	public  List<String> getCELayersFromSurvey(String id) {
 		return getLayersFromSurvey(id, CEFieldName);
+	}
+
+	public ObjectId addUserDetails(UserDetails userDetails){
+		return mergeAndUpdateRecord(userDetails.getId(), getNewGson().toJson(userDetails));
 	}
 }
