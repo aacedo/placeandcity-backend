@@ -1,21 +1,21 @@
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\model\FactorList.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\services\ManagementServices.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\util\GeoJsonOperations.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\model\CE.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\persistence\FPGsonBuilder.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\model\CivicEngagement.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\services\model\TesClas.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\model\SOP.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\persistence\MongoDatabaseManager.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\services\model\SimpleResult.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\model\FirstData.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\model\SC.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\model\SCDimensions.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\services\CORSFilter.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\services\model\LayersResult.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\services\model\IdResult.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\model\SOPPredictors.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\persistence\PersistenceBuilder.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\model\SocialCapital.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\model\SOPDimensions.java
-C:\Users\Germán\Desktop\application\src\main\java\eu\geoc\application\model\Factor.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/persistence/MongoDatabaseManager.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/model/Factor.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/model/FactorList.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/model/SC.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/model/SocialCapital.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/model/FirstData.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/model/CE.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/model/SOP.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/persistence/FPGsonBuilder.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/services/CORSFilter.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/services/ManagementServices.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/services/model/TesClas.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/services/model/LayersResult.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/util/GeoJsonOperations.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/model/SOPDimensions.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/model/SCDimensions.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/model/SOPPredictors.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/persistence/PersistenceBuilder.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/services/model/IdResult.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/model/CivicEngagement.java
+/Users/albertacedosanchez/Google Drive/1_PhD/1. PhD material/1.Material/_Application/Code/albert/src/main/java/eu/geoc/application/services/model/SimpleResult.java
