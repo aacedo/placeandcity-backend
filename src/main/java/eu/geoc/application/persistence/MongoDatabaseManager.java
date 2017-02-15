@@ -6,8 +6,11 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
-import eu.geoc.application.model.Factor;
-import eu.geoc.application.model.FactorList;
+import eu.geoc.application.model.BasicArea;
+import eu.geoc.application.model.CE.CEAreasList;
+import eu.geoc.application.model.AreasList;
+import eu.geoc.application.model.SC.SCAreasList;
+import eu.geoc.application.model.SOP.SOPAreasList;
 import eu.geoc.application.model.UserDetails;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -149,27 +152,27 @@ public class MongoDatabaseManager {
 	}
 
 	public  List<String> getLayersFromSurvey(String id, String fieldName){
-		List<String> factorLayers = new ArrayList<>();
+		List<String> areaLayers = new ArrayList<>();
 		Gson gson = getNewGson();
-		String factorListString = getDocField(id, fieldName);
-		FactorList factorList = gson.fromJson(factorListString, FactorList.class);
-		for (Factor factor : factorList.getFactors()) {
-			factorLayers.add(factor.getLayer());
+		String areaListString = getDocField(id, fieldName);
+		AreasList areasList = gson.fromJson(areaListString, AreasList.class);
+		for (BasicArea area : areasList.getAreas()) {
+			areaLayers.add(area.getLayer());
 		}
-		return factorLayers;
+		return areaLayers;
 	}
 
-	public ObjectId addSOPData(FactorList data){
+	public ObjectId addSOPData(SOPAreasList data){
 		String json = getNewGson().toJson(data);
 		return updateRecord(data.getId(), SOPFieldName, json);
 	}
 
-	public ObjectId addSCData(FactorList data){
+	public ObjectId addSCData(SCAreasList data){
 		String json = getNewGson().toJson(data);
 		return updateRecord(data.getId(), SCFieldName, json);
 	}
 
-	public ObjectId addCEData(FactorList data){
+	public ObjectId addCEData(CEAreasList data){
 		String json = getNewGson().toJson(data);
 		return updateRecord(data.getId(), CEFieldName, json);
 	}

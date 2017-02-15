@@ -1,4 +1,4 @@
-package eu.geoc.application.model;
+package eu.geoc.application.model.CE;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

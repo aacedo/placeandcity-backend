@@ -1,8 +1,10 @@
 package eu.geoc.application.services;
 
 import com.google.gson.Gson;
-import eu.geoc.application.model.FactorList;
+import eu.geoc.application.model.CE.CEAreasList;
 import eu.geoc.application.model.FirstData;
+import eu.geoc.application.model.SC.SCAreasList;
+import eu.geoc.application.model.SOP.SOPAreasList;
 import eu.geoc.application.model.UserDetails;
 import eu.geoc.application.persistence.MongoDatabaseManager;
 import eu.geoc.application.persistence.PersistenceBuilder;
@@ -76,7 +78,7 @@ public class ManagementServices {
 	public IdResult setSOP(String factorListJson) {
 		try {
 			slotDB.connect();
-			FactorList data = getNewGson().fromJson(factorListJson, FactorList.class);		// Verification
+			SOPAreasList data = getNewGson().fromJson(factorListJson, SOPAreasList.class);		// Verification
 			ObjectId id = slotDB.addSOPData(data);
 			slotDB.disconnect();
 			return new IdResult(data.getId());
@@ -108,7 +110,7 @@ public class ManagementServices {
 	public IdResult setSC(String factorListJson) {
 		try {
 			slotDB.connect();
-			FactorList data = getNewGson().fromJson(factorListJson, FactorList.class);		// Verification
+			SCAreasList data = getNewGson().fromJson(factorListJson, SCAreasList.class);		// Verification
 			ObjectId id = slotDB.addSCData(data);
 			slotDB.disconnect();
 			return new IdResult(data.getId());
@@ -140,7 +142,7 @@ public class ManagementServices {
 	public IdResult setCE(String factorListJson) {
 		try {
 			slotDB.connect();
-			FactorList data = getNewGson().fromJson(factorListJson, FactorList.class);		// Verification
+			CEAreasList data = getNewGson().fromJson(factorListJson, CEAreasList.class);		// Verification
 			ObjectId id = slotDB.addCEData(data);
 			slotDB.disconnect();
 			return new IdResult(data.getId());

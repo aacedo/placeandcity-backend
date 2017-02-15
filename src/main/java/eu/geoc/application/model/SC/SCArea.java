@@ -1,23 +1,25 @@
-package eu.geoc.application.model;
+package eu.geoc.application.model.SC;
+
+import eu.geoc.application.model.BasicArea;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Copyright (C) 2016 Geotec. All right reserved.
- * Created by German Mendoza on 06/02/2017.
+ * Created by German Mendoza on 15/02/2017.
  */
 
 @XmlRootElement
-public class SC extends Factor {
+public class SCArea extends BasicArea {
     private SocialCapital socialCapital;
     private SCDimensions dimensions;
 
-    public SC() {
+    public SCArea() {
         super();
     }
 
-    public SC(String layer, SocialCapital socialCapital, SCDimensions dimensions) {
-        super(layer);
+    public SCArea(Boolean livingIn, String layer, SocialCapital socialCapital, SCDimensions dimensions) {
+        super(livingIn, layer);
         this.socialCapital = socialCapital;
         this.dimensions = dimensions;
     }

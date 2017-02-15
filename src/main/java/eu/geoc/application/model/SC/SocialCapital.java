@@ -1,4 +1,4 @@
-package eu.geoc.application.model;
+package eu.geoc.application.model.SC;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -11,21 +11,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class SocialCapital {
     private Integer bosc1;
     private Integer bosc2;
-    private Integer bosc3;
     private Integer brsc1;
     private Integer brsc2;
-    private Integer brsc3;
 
     public SocialCapital() {
     }
 
-    public SocialCapital(Integer bosc1, Integer bosc2, Integer bosc3, Integer brsc1, Integer brsc2, Integer brsc3) {
+    public SocialCapital(Integer bosc1, Integer bosc2, Integer brsc1, Integer brsc2) {
         this.bosc1 = bosc1;
         this.bosc2 = bosc2;
-        this.bosc3 = bosc3;
         this.brsc1 = brsc1;
         this.brsc2 = brsc2;
-        this.brsc3 = brsc3;
     }
 
     public Integer getBosc1() {
@@ -44,14 +40,6 @@ public class SocialCapital {
         this.bosc2 = bosc2;
     }
 
-    public Integer getBosc3() {
-        return bosc3;
-    }
-
-    public void setBosc3(Integer bosc3) {
-        this.bosc3 = bosc3;
-    }
-
     public Integer getBrsc1() {
         return brsc1;
     }
@@ -66,13 +54,5 @@ public class SocialCapital {
 
     public void setBrsc2(Integer brsc2) {
         this.brsc2 = brsc2;
-    }
-
-    public Integer getBrsc3() {
-        return brsc3;
-    }
-
-    public void setBrsc3(Integer brsc3) {
-        this.brsc3 = brsc3;
     }
 }

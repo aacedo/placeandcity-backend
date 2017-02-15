@@ -1,25 +1,25 @@
-package eu.geoc.application.model;
+package eu.geoc.application.model.SOP;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import eu.geoc.application.model.BasicArea;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Copyright (C) 2016 Geotec. All right reserved.
- * Created by German Mendoza on 26/01/2017.
+ * Created by German Mendoza on 15/02/2017.
  */
 
 @XmlRootElement
-public class SOP extends Factor {
+public class SOPArea extends BasicArea {
     private SOPPredictors predictors;
     private SOPDimensions dimensions;
 
-    public SOP() {
+    public SOPArea() {
         super();
     }
 
-    public SOP(String layer, SOPPredictors predictors, SOPDimensions dimensions) {
-        super(layer);
+    public SOPArea(Boolean livingIn, String layer, SOPPredictors predictors, SOPDimensions dimensions) {
+        super(livingIn, layer);
         this.predictors = predictors;
         this.dimensions = dimensions;
     }
