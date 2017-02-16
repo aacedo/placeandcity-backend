@@ -12,16 +12,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SCArea extends BasicArea {
     private SocialCapital socialCapital;
-    private SCDimensions dimensions;
 
     public SCArea() {
         super();
     }
 
-    public SCArea(Boolean livingIn, String layer, SocialCapital socialCapital, SCDimensions dimensions) {
+    public SCArea(Boolean livingIn, String layer, SocialCapital socialCapital) {
         super(livingIn, layer);
         this.socialCapital = socialCapital;
-        this.dimensions = dimensions;
     }
 
     public SocialCapital getSocialCapital() {
@@ -32,11 +30,4 @@ public class SCArea extends BasicArea {
         this.socialCapital = socialCapital;
     }
 
-    public SCDimensions getDimensions() {
-        return dimensions;
-    }
-
-    public void setDimensions(SCDimensions dimensions) {
-        this.dimensions = dimensions;
-    }
 }

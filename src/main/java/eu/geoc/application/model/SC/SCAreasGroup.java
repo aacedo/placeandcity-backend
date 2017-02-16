@@ -11,14 +11,16 @@ import java.util.List;
 @XmlRootElement
 public class SCAreasGroup {
     private String name;
+    private SCDimensions dimensions;
     private List<SCArea> areas;
 
     public SCAreasGroup() {
     }
 
-    public SCAreasGroup(String name, List<SCArea> areas) {
+    public SCAreasGroup(String name, List<SCArea> areas, SCDimensions dimensions) {
         this.name = name;
         this.areas = areas;
+        this.dimensions = dimensions;
     }
 
     public String getName() {
@@ -35,5 +37,13 @@ public class SCAreasGroup {
 
     public void setAreas(List<SCArea> areas) {
         this.areas = areas;
+    }
+
+    public SCDimensions getDimensions() {
+        return dimensions;
+    }
+
+    public void setDimensions(SCDimensions dimensions) {
+        this.dimensions = dimensions;
     }
 }
