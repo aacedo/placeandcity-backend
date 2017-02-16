@@ -125,30 +125,29 @@ public class MongoDatabaseManager {
 		return getRecords(mainCollection);
 	}
 
-	public ObjectId updateRecord(String id, String fieldName, String data){
+	public void updateRecord(String id, String fieldName, String data){
 		List<String> records = getRecords(mainCollection, new Document("_id", new ObjectId(id)));
 		Document doc = Document.parse(records.get(0));
-		doc.put(fieldName, data);
+		Document docData = Document.parse(data);
+		doc.put(fieldName, docData);
 		MongoCollection<Document> collection = this.database.getCollection(mainCollection);
 		Document id1 = collection.findOneAndReplace(eq("_id", new ObjectId(id)), doc);
-		return doc.getObjectId("_id");
 	}
 
-	public ObjectId mergeAndUpdateRecord(String id, String data){
+	public void mergeAndUpdateRecord(String id, String data){
 		List<String> records = getRecords(mainCollection, new Document("_id", new ObjectId(id)));
 		Document doc = Document.parse(records.get(0));
 		Document parsed = Document.parse(data);
 		doc.putAll(parsed);
 		MongoCollection<Document> collection = this.database.getCollection(mainCollection);
 		Document id1 = collection.findOneAndReplace(eq("_id", new ObjectId(id)), doc);
-		return doc.getObjectId("_id");
 	}
 
 	public String getDocField(String id, String fieldName){
 		List<String> records = getRecords(mainCollection, new Document("_id", new ObjectId(id)));
 		Document doc = Document.parse(records.get(0));
-		Document sopDoc = Document.parse(doc.get(fieldName).toString());
-		return sopDoc.toJson();
+		//Document sopDoc = Document.parse(doc.get(fieldName).toString());
+		return ((Document)doc.get(fieldName)).toJson();
 	}
 
 	public  List<String> getLayersFromSurvey(String id, String fieldName){
@@ -162,19 +161,27 @@ public class MongoDatabaseManager {
 		return areaLayers;
 	}
 
-	public ObjectId addSOPData(SOPAreasList data){
-		String json = getNewGson().toJson(data);
-		return updateRecord(data.getId(), SOPFieldName, json);
+	public void addSOPData(SOPAreasList data){
+		String json = getJsonString(data);
+		updateRecord(data.getId(), SOPFieldName, json);
 	}
 
-	public ObjectId addSCData(SCAreasList data){
-		String json = getNewGson().toJson(data);
-		return updateRecord(data.getId(), SCFieldName, json);
+	public void addSCData(SCAreasList data){
+		String json = getJsonString(data);
+		updateRecord(data.getId(), SCFieldName, json);
 	}
 
-	public ObjectId addCEData(CEAreasList data){
-		String json = getNewGson().toJson(data);
-		return updateRecord(data.getId(), CEFieldName, json);
+	public void addCEData(CEAreasList data){
+		String json = getJsonString(data);
+		updateRecord(data.getId(), CEFieldName, json);
+	}
+
+	private String getJsonString(AreasList data) {
+		String id = data.getId();
+		data.setId(null);
+		String json = getNewGson().toJson(data, AreasList.class);
+		data.setId(id);
+		return json;
 	}
 
 	public  List<String> getSOPLayersFromSurvey(String id) {
@@ -189,7 +196,11 @@ public class MongoDatabaseManager {
 		return getLayersFromSurvey(id, CEFieldName);
 	}
 
-	public ObjectId addUserDetails(UserDetails userDetails){
-		return mergeAndUpdateRecord(userDetails.getId(), getNewGson().toJson(userDetails));
+	public void addUserDetails(UserDetails userDetails){
+		String id = userDetails.getId();
+		userDetails.setId(null);
+		String json = getNewGson().toJson(userDetails);
+		userDetails.setId(id);
+		mergeAndUpdateRecord(userDetails.getId(), json);
 	}
 }

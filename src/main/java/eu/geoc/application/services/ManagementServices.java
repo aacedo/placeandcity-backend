@@ -79,7 +79,7 @@ public class ManagementServices {
 		try {
 			slotDB.connect();
 			SOPAreasList data = getNewGson().fromJson(factorListJson, SOPAreasList.class);		// Verification
-			ObjectId id = slotDB.addSOPData(data);
+			slotDB.addSOPData(data);
 			slotDB.disconnect();
 			return new IdResult(data.getId());
 		}
@@ -111,7 +111,7 @@ public class ManagementServices {
 		try {
 			slotDB.connect();
 			SCAreasList data = getNewGson().fromJson(factorListJson, SCAreasList.class);		// Verification
-			ObjectId id = slotDB.addSCData(data);
+			slotDB.addSCData(data);
 			slotDB.disconnect();
 			return new IdResult(data.getId());
 		}
@@ -143,7 +143,7 @@ public class ManagementServices {
 		try {
 			slotDB.connect();
 			CEAreasList data = getNewGson().fromJson(factorListJson, CEAreasList.class);		// Verification
-			ObjectId id = slotDB.addCEData(data);
+			slotDB.addCEData(data);
 			slotDB.disconnect();
 			return new IdResult(data.getId());
 		}
@@ -159,7 +159,7 @@ public class ManagementServices {
 		try {
 			slotDB.connect();
 			UserDetails userDetails = getNewGson().fromJson(userDetailsString, UserDetails.class);		// Verification
-			ObjectId id = slotDB.addUserDetails(userDetails);
+			slotDB.addUserDetails(userDetails);
 			slotDB.disconnect();
 			return new IdResult(userDetails.getId());
 		}
