@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class SCDimensions {
-    private boolean liveArea;
     private Integer sc1;
     private Integer sc2;
     private Integer sc3;
@@ -26,8 +25,7 @@ public class SCDimensions {
     public SCDimensions() {
     }
 
-    public SCDimensions(boolean liveArea, Integer sc1, Integer sc2, Integer sc3, Integer n1, Integer n2, Integer n3, Integer cee1, Integer cee2, Integer cee3, Integer cp1, Integer cp2, Integer cp3) {
-        this.liveArea = liveArea;
+    public SCDimensions(Integer sc1, Integer sc2, Integer sc3, Integer n1, Integer n2, Integer n3, Integer cee1, Integer cee2, Integer cee3, Integer cp1, Integer cp2, Integer cp3) {
         this.sc1 = sc1;
         this.sc2 = sc2;
         this.sc3 = sc3;
@@ -40,14 +38,6 @@ public class SCDimensions {
         this.cp1 = cp1;
         this.cp2 = cp2;
         this.cp3 = cp3;
-    }
-
-    public boolean isLiveArea() {
-        return liveArea;
-    }
-
-    public void setLiveArea(boolean liveArea) {
-        this.liveArea = liveArea;
     }
 
     public Integer getSc1() {

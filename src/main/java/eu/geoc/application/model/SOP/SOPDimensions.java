@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class SOPDimensions {
-    private Boolean liveArea;
     private Integer pi1;
     private Integer pi2;
     private Integer pi3;
@@ -18,13 +17,12 @@ public class SOPDimensions {
     private Integer pa3;
     private Integer pd1;
     private Integer pd2;
-    private Integer pid3;
+    private Integer pd3;
 
     public SOPDimensions() {
     }
 
-    public SOPDimensions(Boolean liveArea, Integer pi1, Integer pi2, Integer pi3, Integer pa1, Integer pa2, Integer pa3, Integer pd1, Integer pd2, Integer pid3) {
-        this.liveArea = liveArea;
+    public SOPDimensions(Integer pi1, Integer pi2, Integer pi3, Integer pa1, Integer pa2, Integer pa3, Integer pd1, Integer pd2, Integer pd3) {
         this.pi1 = pi1;
         this.pi2 = pi2;
         this.pi3 = pi3;
@@ -33,15 +31,7 @@ public class SOPDimensions {
         this.pa3 = pa3;
         this.pd1 = pd1;
         this.pd2 = pd2;
-        this.pid3 = pid3;
-    }
-
-    public Boolean isLiveArea() {
-        return liveArea;
-    }
-
-    public void setLiveArea(Boolean liveArea) {
-        this.liveArea = liveArea;
+        this.pd3 = pd3;
     }
 
     public Integer getPi1() {
@@ -108,11 +98,11 @@ public class SOPDimensions {
         this.pd2 = pd2;
     }
 
-    public Integer getPid3() {
-        return pid3;
+    public Integer getPd3() {
+        return pd3;
     }
 
-    public void setPid3(Integer pid3) {
-        this.pid3 = pid3;
+    public void setPd3(Integer pd3) {
+        this.pd3 = pd3;
     }
 }
