@@ -109,6 +109,19 @@ public class MongoDatabaseManager {
 		return info;
 	}
 
+	private List<Document> getSimpleRecords(String collectionName){
+		List<Document> docs = new Vector<Document>();
+
+		MongoCollection<Document> collection = this.database.getCollection(collectionName);
+		MongoCursor<Document> cursor = collection.find().projection(Projections.excludeId()).iterator();
+
+		while(cursor.hasNext()){
+			Document doc = cursor.next();
+			docs.add(doc);
+		}
+		return docs;
+	}
+
 	private ObjectId insertRecord(String collectionName, String record){
 		Document doc = Document.parse(record);
 		MongoCollection<Document> collection = this.database.getCollection(collectionName);
@@ -161,6 +174,20 @@ public class MongoDatabaseManager {
 		return areaLayers;
 	}
 
+	public  List<String> getAllLayers(String fieldName){
+		List<String> areaLayers = new ArrayList<>();
+		List<Document> records = getSimpleRecords(mainCollection);
+		Gson gson = getNewGson();
+		for (Document record : records) {
+			String areaListString = ((Document)record.get(fieldName)).toJson();
+			AreasList areasList = gson.fromJson(areaListString, AreasList.class);
+			for (BasicArea area : areasList.getAreas()) {
+				areaLayers.add(area.getLayer());
+			}
+		}
+		return areaLayers;
+	}
+
 	public void addSOPData(SOPAreasList data){
 		String json = getJsonString(data);
 		updateRecord(data.getId(), SOPFieldName, json);
@@ -194,6 +221,18 @@ public class MongoDatabaseManager {
 
 	public  List<String> getCELayersFromSurvey(String id) {
 		return getLayersFromSurvey(id, CEFieldName);
+	}
+
+	public  List<String> getAllSOPLayers() {
+		return getAllLayers(SOPFieldName);
+	}
+
+	public  List<String> getAllSCLayers() {
+		return getAllLayers(SCFieldName);
+	}
+
+	public  List<String> getAllCELayers() {
+		return getAllLayers(CEFieldName);
 	}
 
 	public void addUserDetails(UserDetails userDetails){

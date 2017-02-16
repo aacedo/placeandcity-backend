@@ -58,6 +58,22 @@ public class ManagementServices {
 	}
 
 	@GET
+	@Path("SOP_data")
+	public LayersResult getAllSOP() {
+		try {
+			slotDB.connect();
+			List<String> allSopLayers = slotDB.getAllSOPLayers();
+			slotDB.disconnect();
+			String joinGeoJson = GeoJsonOperations.joinGeoJson(allSopLayers);
+			return new LayersResult("0", joinGeoJson);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return new LayersResult("0", "");
+		}
+	}
+
+	@GET
 	@Path("SOP_data/{id}")
 	public LayersResult getSOPs(@PathParam("id") String id) {
 		try {
@@ -90,13 +106,29 @@ public class ManagementServices {
 	}
 
 	@GET
+	@Path("SC_data")
+	public LayersResult getAllSC() {
+		try {
+			slotDB.connect();
+			List<String> allScLayers = slotDB.getAllSCLayers();
+			slotDB.disconnect();
+			String joinGeoJson = GeoJsonOperations.joinGeoJson(allScLayers);
+			return new LayersResult("0", joinGeoJson);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return new LayersResult("0", "");
+		}
+	}
+
+	@GET
 	@Path("SC_data/{id}")
 	public LayersResult getSC(@PathParam("id") String id) {
 		try {
 			slotDB.connect();
-			List<String> sopLayers = slotDB.getSCLayersFromSurvey(id);
+			List<String> scLayers = slotDB.getSCLayersFromSurvey(id);
 			slotDB.disconnect();
-			String joinGeoJson = GeoJsonOperations.joinGeoJson(sopLayers);
+			String joinGeoJson = GeoJsonOperations.joinGeoJson(scLayers);
 			return new LayersResult(id, joinGeoJson);
 		}
 		catch (Exception e){
@@ -122,13 +154,29 @@ public class ManagementServices {
 	}
 
 	@GET
+	@Path("CE_data")
+	public LayersResult getAllCE() {
+		try {
+			slotDB.connect();
+			List<String> allCeLayers = slotDB.getAllCELayers();
+			slotDB.disconnect();
+			String joinGeoJson = GeoJsonOperations.joinGeoJson(allCeLayers);
+			return new LayersResult("0", joinGeoJson);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return new LayersResult("0", "");
+		}
+	}
+
+	@GET
 	@Path("CE_data/{id}")
 	public LayersResult getCE(@PathParam("id") String id) {
 		try {
 			slotDB.connect();
-			List<String> sopLayers = slotDB.getCELayersFromSurvey(id);
+			List<String> ceLayers = slotDB.getCELayersFromSurvey(id);
 			slotDB.disconnect();
-			String joinGeoJson = GeoJsonOperations.joinGeoJson(sopLayers);
+			String joinGeoJson = GeoJsonOperations.joinGeoJson(ceLayers);
 			return new LayersResult(id, joinGeoJson);
 		}
 		catch (Exception e){
