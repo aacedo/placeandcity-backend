@@ -10,8 +10,8 @@ import java.util.List;
 @XmlRootElement
 public class FirstData {
     private boolean home;
-    private int freguesia;
-    private int howlong;
+    private Integer freguesia;
+    private Integer howlong;
     private String zip;
     private List<Integer> problem;
 
@@ -19,7 +19,7 @@ public class FirstData {
     public FirstData() {
     }
 
-    public FirstData(boolean home, int freguesia, int howlong, String zip, List<Integer> problem) {
+    public FirstData(boolean home, Integer freguesia, Integer howlong, String zip, List<Integer> problem) {
         this.home = home;
         this.freguesia = freguesia;
         this.howlong = howlong;
@@ -35,19 +35,19 @@ public class FirstData {
         this.home = home;
     }
 
-    public int getFreguesia() {
+    public Integer getFreguesia() {
         return freguesia;
     }
 
-    public void setFreguesia(int freguesia) {
+    public void setFreguesia(Integer freguesia) {
         this.freguesia = freguesia;
     }
 
-    public int getHowlong() {
+    public Integer getHowlong() {
         return howlong;
     }
 
-    public void setHowlong(int howlong) {
+    public void setHowlong(Integer howlong) {
         this.howlong = howlong;
     }
 

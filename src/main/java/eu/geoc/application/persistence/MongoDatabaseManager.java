@@ -9,6 +9,7 @@ import com.mongodb.client.model.Projections;
 import eu.geoc.application.model.BasicArea;
 import eu.geoc.application.model.CE.CEAreasList;
 import eu.geoc.application.model.AreasList;
+import eu.geoc.application.model.LastData;
 import eu.geoc.application.model.SC.SCAreasList;
 import eu.geoc.application.model.SOP.SOPAreasList;
 import eu.geoc.application.model.UserDetails;
@@ -241,5 +242,13 @@ public class MongoDatabaseManager {
 		String json = getNewGson().toJson(userDetails);
 		userDetails.setId(id);
 		mergeAndUpdateRecord(userDetails.getId(), json);
+	}
+
+	public void addFinalDetails(LastData lastData){
+		String id = lastData.getId();
+		lastData.setId(null);
+		String json = getNewGson().toJson(lastData);
+		lastData.setId(id);
+		mergeAndUpdateRecord(lastData.getId(), json);
 	}
 }

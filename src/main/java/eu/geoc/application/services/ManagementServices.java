@@ -3,6 +3,7 @@ package eu.geoc.application.services;
 import com.google.gson.Gson;
 import eu.geoc.application.model.CE.CEAreasList;
 import eu.geoc.application.model.FirstData;
+import eu.geoc.application.model.LastData;
 import eu.geoc.application.model.SC.SCAreasList;
 import eu.geoc.application.model.SOP.SOPAreasList;
 import eu.geoc.application.model.UserDetails;
@@ -215,6 +216,16 @@ public class ManagementServices {
 			e.printStackTrace();
 			return new IdResult("0");
 		}
+	}
+
+	@POST
+	@Path("final_details")
+	public IdResult setFinalDetails(String finalDetailsData) {
+		slotDB.connect();
+		LastData finalDetails = getNewGson().fromJson(finalDetailsData, LastData.class);
+		slotDB.addFinalDetails(finalDetails);
+		slotDB.disconnect();
+		return new IdResult(finalDetails.getId());
 	}
 
 	//region Commented to be used as example
