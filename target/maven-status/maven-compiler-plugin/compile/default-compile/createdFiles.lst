@@ -1,14 +1,1 @@
-eu\geoc\application\util\GeoJsonOperations$1.class
-eu\geoc\application\services\CORSFilter.class
-eu\geoc\application\services\model\LayersResult.class
-eu\geoc\application\persistence\FPGsonBuilder.class
-eu\geoc\application\persistence\PersistenceBuilder.class
-eu\geoc\application\services\model\SimpleResult.class
-eu\geoc\application\services\model\TesClas.class
-eu\geoc\application\persistence\MongoDatabaseManager.class
-eu\geoc\application\util\GeoJsonOperations$Operations.class
-eu\geoc\application\services\model\IdResult.class
-eu\geoc\application\services\ManagementServices.class
-eu\geoc\application\util\GeoJsonOperations.class
-eu\geoc\application\persistence\MongoDatabaseManager$MongoDBManagerConfig.class
-eu\geoc\application\model\FirstData.class
+eu/geoc/application/model/LastData.class
