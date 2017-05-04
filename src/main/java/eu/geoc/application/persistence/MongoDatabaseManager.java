@@ -180,10 +180,15 @@ public class MongoDatabaseManager {
 		List<Document> records = getSimpleRecords(mainCollection);
 		Gson gson = getNewGson();
 		for (Document record : records) {
-			String areaListString = ((Document)record.get(fieldName)).toJson();
-			AreasList areasList = gson.fromJson(areaListString, AreasList.class);
-			for (BasicArea area : areasList.getAreas()) {
-				areaLayers.add(area.getLayer());
+			Object rec = record.get(fieldName);
+			if(rec != null) {
+				String areaListString = ((Document) rec).toJson();
+				AreasList areasList = gson.fromJson(areaListString, AreasList.class);
+				if (areasList != null) {
+					for (BasicArea area : areasList.getAreas()) {
+						areaLayers.add(area.getLayer());
+					}
+				}
 			}
 		}
 		return areaLayers;
