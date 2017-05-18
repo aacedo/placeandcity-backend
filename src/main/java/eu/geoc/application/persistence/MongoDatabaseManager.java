@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
+import eu.geoc.application.model.FinalComments;
 import eu.geoc.application.model.BasicArea;
 import eu.geoc.application.model.CE.CEAreasList;
 import eu.geoc.application.model.AreasList;
@@ -255,5 +256,13 @@ public class MongoDatabaseManager {
 		String json = getNewGson().toJson(lastData);
 		lastData.setId(id);
 		mergeAndUpdateRecord(lastData.getId(), json);
+	}
+
+	public void addFinalDetails(FinalComments finalComments){
+		String id = finalComments.getId();
+		finalComments.setId(null);
+		String json = getNewGson().toJson(finalComments);
+		finalComments.setId(id);
+		mergeAndUpdateRecord(finalComments.getId(), json);
 	}
 }

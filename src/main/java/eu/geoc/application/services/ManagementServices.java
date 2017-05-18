@@ -1,6 +1,7 @@
 package eu.geoc.application.services;
 
 import com.google.gson.Gson;
+import eu.geoc.application.model.FinalComments;
 import eu.geoc.application.model.CE.CEAreasList;
 import eu.geoc.application.model.FirstData;
 import eu.geoc.application.model.LastData;
@@ -226,6 +227,16 @@ public class ManagementServices {
 		slotDB.addFinalDetails(finalDetails);
 		slotDB.disconnect();
 		return new IdResult(finalDetails.getId());
+	}
+
+	@POST
+	@Path("comments")
+	public IdResult setFinalComments(String finalCommentsData) {
+		slotDB.connect();
+		FinalComments finalComments = getNewGson().fromJson(finalCommentsData, FinalComments.class);
+		slotDB.addFinalDetails(finalComments);
+		slotDB.disconnect();
+		return new IdResult(finalComments.getId());
 	}
 
 	//region Commented to be used as example
