@@ -2,6 +2,7 @@ eu\geoc\application\model\SOP\SOPArea.class
 eu\geoc\application\util\GeoJsonOperations$1.class
 eu\geoc\application\model\SC\SCAreasList.class
 eu\geoc\application\model\CE\CEAreasList.class
+eu\geoc\application\services\model\AllResult.class
 eu\geoc\application\model\AreasList.class
 eu\geoc\application\model\SC\SCArea.class
 eu\geoc\application\services\CORSFilter.class
@@ -26,5 +27,6 @@ eu\geoc\application\util\GeoJsonOperations$Operations.class
 eu\geoc\application\services\model\IdResult.class
 eu\geoc\application\services\ManagementServices.class
 eu\geoc\application\util\GeoJsonOperations.class
+eu\geoc\application\model\FinalComments.class
 eu\geoc\application\persistence\MongoDatabaseManager$MongoDBManagerConfig.class
 eu\geoc\application\model\FirstData.class

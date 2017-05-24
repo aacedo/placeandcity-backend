@@ -10,16 +10,20 @@ import eu.geoc.application.model.SOP.SOPAreasList;
 import eu.geoc.application.model.UserDetails;
 import eu.geoc.application.persistence.MongoDatabaseManager;
 import eu.geoc.application.persistence.PersistenceBuilder;
+import eu.geoc.application.services.model.AllResult;
 import eu.geoc.application.services.model.IdResult;
 import eu.geoc.application.services.model.LayersResult;
 import eu.geoc.application.util.GeoJsonOperations;
 import org.bson.types.ObjectId;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
+import java.util.ArrayList;
 import java.util.List;
 
 import static eu.geoc.application.persistence.FPGsonBuilder.getNewGson;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 @Consumes({APPLICATION_JSON})
 @Produces({APPLICATION_JSON})
@@ -237,6 +241,23 @@ public class ManagementServices {
 		slotDB.addFinalDetails(finalComments);
 		slotDB.disconnect();
 		return new IdResult(finalComments.getId());
+	}
+
+	@GET
+	@Path("all")
+	@Produces(TEXT_PLAIN)
+	public String getItAll() {
+		slotDB.connect();
+		List<String> all = slotDB.getDocs();
+		String str ="[";
+		for (String s : all) {
+			str = str + s + ",";
+		}
+		str = str.substring(0, str.length()-1);
+		str = str + "]";
+		str = str.replace("\\\"", "\"").replace("\"{", "{").replace("}\"", "}");
+		slotDB.disconnect();
+		return str;
 	}
 
 	//region Commented to be used as example

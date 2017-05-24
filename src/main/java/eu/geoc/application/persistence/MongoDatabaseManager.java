@@ -265,4 +265,15 @@ public class MongoDatabaseManager {
 		finalComments.setId(id);
 		mergeAndUpdateRecord(finalComments.getId(), json);
 	}
+
+	public List<AreasList> getAll(){
+		List<Document> records = getSimpleRecords(mainCollection);
+		List<AreasList> all = new ArrayList<>();
+		for (Document record : records) {
+			String json = record.toJson();
+			AreasList data = getNewGson().fromJson(json, AreasList.class);
+			all.add(data);
+		}
+		return all;
+	}
 }

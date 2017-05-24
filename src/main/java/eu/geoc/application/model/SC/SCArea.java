@@ -29,5 +29,4 @@ public class SCArea extends BasicArea {
     public void setSocialCapital(SocialCapital socialCapital) {
         this.socialCapital = socialCapital;
     }
-
 }

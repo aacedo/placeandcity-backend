@@ -13,15 +13,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class SOPArea extends BasicArea {
     private SOPPredictors predictors;
     private SOPDimensions dimensions;
+    private String name;
 
     public SOPArea() {
         super();
     }
 
-    public SOPArea(Boolean livingIn, String layer, SOPPredictors predictors, SOPDimensions dimensions) {
+    public SOPArea(Boolean livingIn, String layer, SOPPredictors predictors, SOPDimensions dimensions, String name) {
         super(livingIn, layer);
         this.predictors = predictors;
         this.dimensions = dimensions;
+        this.name = name;
     }
 
     public SOPPredictors getPredictors() {
@@ -38,5 +40,13 @@ public class SOPArea extends BasicArea {
 
     public void setDimensions(SOPDimensions dimensions) {
         this.dimensions = dimensions;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
