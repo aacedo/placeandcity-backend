@@ -1,5 +1,7 @@
 package eu.geoc.application.model;
 
+import org.geojson.FeatureCollection;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -10,12 +12,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public abstract class BasicArea {
     private Boolean livingIn;
-    protected String layer;
+    protected FeatureCollection layer;
 
     public BasicArea() {
     }
 
-    public BasicArea(Boolean livingIn, String layer) {
+    public BasicArea(Boolean livingIn, FeatureCollection layer) {
         this.livingIn = livingIn;
         this.layer = layer;
     }
@@ -28,11 +30,11 @@ public abstract class BasicArea {
         this.livingIn = livingIn;
     }
 
-    public String getLayer() {
+    public FeatureCollection getLayer() {
         return layer;
     }
 
-    public void setLayer(String layer) {
+    public void setLayer(FeatureCollection layer) {
         this.layer = layer;
     }
 }

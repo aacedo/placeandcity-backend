@@ -1,6 +1,7 @@
 package eu.geoc.application.model.SOP;
 
 import eu.geoc.application.model.BasicArea;
+import org.geojson.FeatureCollection;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -19,7 +20,7 @@ public class SOPArea extends BasicArea {
         super();
     }
 
-    public SOPArea(Boolean livingIn, String layer, SOPPredictors predictors, SOPDimensions dimensions, String name) {
+    public SOPArea(Boolean livingIn, FeatureCollection layer, SOPPredictors predictors, SOPDimensions dimensions, String name) {
         super(livingIn, layer);
         this.predictors = predictors;
         this.dimensions = dimensions;

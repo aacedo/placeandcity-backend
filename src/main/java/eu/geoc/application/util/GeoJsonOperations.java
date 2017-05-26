@@ -11,7 +11,6 @@ import org.geojson.Geometry;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,37 +23,23 @@ public class GeoJsonOperations {
         UNION, INTERSECTION, DIFFERENCE
     }
 
-    public static String joinGeoJson(List<String> geoJsonList) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JtsModule());
+    public static FeatureCollection joinGeoJson(List<FeatureCollection> geoJsonList) throws IOException {
         FeatureCollection nfc = new FeatureCollection();
-        for (String geoJson : geoJsonList) {
-            GeoJsonObject geoJsonObject = new ObjectMapper().readValue(prepareString(geoJson), GeoJsonObject.class);
-            if (geoJsonObject instanceof FeatureCollection){
-                FeatureCollection fc = (FeatureCollection)geoJsonObject;
-                for (Feature feature : fc) {
-                    nfc.add(feature);
-                }
-            }
+        for (FeatureCollection fc : geoJsonList) {
+            nfc.addAll(fc.getFeatures());
         }
-        String resultString = new ObjectMapper().writeValueAsString(nfc);
-        return resultString;
+        return nfc;
     }
 
-    private static String prepareString(String geoJson) {
-        return geoJson.replace("\'", "\"");
-    }
-
-    public static String applyOp(List<String> geoJsonList, Operations operation) throws IOException {
-        String resultString = null;
+    public static FeatureCollection applyOp(List<FeatureCollection> fcList, Operations operation) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JtsModule());
         com.vividsolutions.jts.geom.Geometry result = null;
 
-        for (String geoJson : geoJsonList) {
-            String geoJsonString = prepareString(geoJson);
-            List<String> geometriesJson = getGeometriesJson(mapper, geoJsonString);
-            for (String geometryJson : geometriesJson) {
+        for (FeatureCollection fc : fcList) {
+            List<Feature> features = fc.getFeatures();
+            for (Feature feature : features) {
+                String geometryJson = mapper.writeValueAsString(feature);
                 Polygon polygon = readJTSPolygon(mapper, geometryJson);
                 if (result == null){
                     result = polygon;
@@ -70,11 +55,9 @@ public class GeoJsonOperations {
                 }
 
             }
-
-            FeatureCollection fc = createFeatureCollection(mapper, result);
-            resultString= new ObjectMapper().writeValueAsString(fc);
         }
-        return resultString;
+        FeatureCollection nfc = createFeatureCollection(mapper, result);
+        return nfc;
     }
 
     private static FeatureCollection createFeatureCollection(ObjectMapper mapper, com.vividsolutions.jts.geom.Geometry result) throws IOException {
@@ -86,19 +69,6 @@ public class GeoJsonOperations {
         FeatureCollection fc = new FeatureCollection();
         fc.add(feature);
         return fc;
-    }
-
-    private static List<String> getGeometriesJson(ObjectMapper mapper, String geoJsonString) throws IOException {
-        List<String> geometriesJson = new ArrayList<>();
-        GeoJsonObject geoJsonObject = mapper.readValue(geoJsonString, GeoJsonObject.class);
-        if (geoJsonObject instanceof FeatureCollection){
-            FeatureCollection fc = (FeatureCollection)geoJsonObject;
-            for (Feature feature : fc) {
-                String json = new ObjectMapper().writeValueAsString(feature.getGeometry());
-                geometriesJson.add(json);
-            }
-        }
-        return geometriesJson;
     }
 
     private static Polygon readJTSPolygon(ObjectMapper mapper, String geometryJson) throws IOException {

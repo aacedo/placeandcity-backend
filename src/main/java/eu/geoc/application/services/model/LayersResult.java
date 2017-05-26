@@ -1,5 +1,7 @@
 package eu.geoc.application.services.model;
 
+import org.geojson.FeatureCollection;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -7,32 +9,23 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement
-public class LayersResult {
-    private String id;
-    private String geoJson;
+public class LayersResult extends IdResult{
+    private FeatureCollection geoJson;
 
     public LayersResult() {
-
+        super();
     }
 
-    public LayersResult(String id, String geoJson) {
-        this.id = id;
+    public LayersResult(String id, FeatureCollection geoJson) {
+        super(id);
         this.geoJson = geoJson;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getGeoJson() {
+    public FeatureCollection getGeoJson() {
         return geoJson;
     }
 
-    public void setGeoJson(String geoJson) {
+    public void setGeoJson(FeatureCollection geoJson) {
         this.geoJson = geoJson;
     }
 }

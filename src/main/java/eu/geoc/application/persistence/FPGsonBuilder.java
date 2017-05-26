@@ -11,6 +11,7 @@ import eu.geoc.application.model.SC.SCArea;
 import eu.geoc.application.model.SC.SCAreasList;
 import eu.geoc.application.model.SOP.SOPArea;
 import eu.geoc.application.model.SOP.SOPAreasList;
+import org.geojson.FeatureCollection;
 
 /**
  * Copyright (C) 2016 Geotec. All right reserved.
@@ -29,6 +30,11 @@ public class FPGsonBuilder {
                 .registerSubtype(SOPArea.class, "sopa")
                 .registerSubtype(SCArea.class, "sca")
                 .registerSubtype(CEArea.class, "cea");
-        return new GsonBuilder().registerTypeAdapterFactory(adapterALFactory).registerTypeAdapterFactory(adapterAFactory).setPrettyPrinting().create();
+        return new GsonBuilder()
+                .registerTypeAdapterFactory(adapterALFactory)
+                .registerTypeAdapterFactory(adapterAFactory)
+                .registerTypeAdapter(FeatureCollection.class, new FeatureCollectionDeSerializer())
+                .setPrettyPrinting()
+                .create();
     }
 }

@@ -1,7 +1,6 @@
 package eu.geoc.application.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import java.awt.geom.Area;
 import java.util.List;
 
 /**

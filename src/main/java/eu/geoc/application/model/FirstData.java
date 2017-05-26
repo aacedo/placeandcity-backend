@@ -14,17 +14,19 @@ public class FirstData {
     private Integer howlong;
     private String zip;
     private List<Integer> problem;
+    private String date;
 
 
     public FirstData() {
     }
 
-    public FirstData(boolean home, Integer freguesia, Integer howlong, String zip, List<Integer> problem) {
+    public FirstData(boolean home, Integer freguesia, Integer howlong, String zip, List<Integer> problem, String date) {
         this.home = home;
         this.freguesia = freguesia;
         this.howlong = howlong;
         this.zip = zip;
         this.problem = problem;
+        this.date = date;
     }
 
     public boolean isHome() {
@@ -65,5 +67,13 @@ public class FirstData {
 
     public void setProblem(List<Integer> problem) {
         this.problem = problem;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

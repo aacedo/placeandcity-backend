@@ -1,6 +1,7 @@
 package eu.geoc.application.model.CE;
 
 import eu.geoc.application.model.BasicArea;
+import org.geojson.FeatureCollection;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -16,7 +17,7 @@ public class CEArea extends BasicArea {
         super();
     }
 
-    public CEArea(Boolean livingIn, String layer) {
+    public CEArea(Boolean livingIn, FeatureCollection layer) {
         super(livingIn, layer);
     }
 }

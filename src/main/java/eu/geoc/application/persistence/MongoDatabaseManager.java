@@ -5,7 +5,6 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Projections;
 import eu.geoc.application.model.FinalComments;
 import eu.geoc.application.model.BasicArea;
 import eu.geoc.application.model.CE.CEAreasList;
@@ -16,6 +15,7 @@ import eu.geoc.application.model.SOP.SOPAreasList;
 import eu.geoc.application.model.UserDetails;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.geojson.FeatureCollection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,8 +100,8 @@ public class MongoDatabaseManager {
 
 		MongoCollection<Document> collection = this.database.getCollection(collectionName);
 		MongoCursor<Document> cursor = (filter == null)?
-				collection.find().projection(Projections.excludeId()).iterator():
-				collection.find(filter).projection(Projections.excludeId()).iterator();
+				collection.find()/*.projection(Projections.excludeId())*/.iterator():
+				collection.find(filter)/*.projection(Projections.excludeId())*/.iterator();
 
 		while(cursor.hasNext()){
 			Document doc = cursor.next();
@@ -115,7 +115,7 @@ public class MongoDatabaseManager {
 		List<Document> docs = new Vector<Document>();
 
 		MongoCollection<Document> collection = this.database.getCollection(collectionName);
-		MongoCursor<Document> cursor = collection.find().projection(Projections.excludeId()).iterator();
+		MongoCursor<Document> cursor = collection.find()/*.projection(Projections.excludeId())*/.iterator();
 
 		while(cursor.hasNext()){
 			Document doc = cursor.next();
@@ -165,8 +165,8 @@ public class MongoDatabaseManager {
 		return ((Document)doc.get(fieldName)).toJson();
 	}
 
-	public  List<String> getLayersFromSurvey(String id, String fieldName){
-		List<String> areaLayers = new ArrayList<>();
+	public List<FeatureCollection> getLayersFromSurvey(String id, String fieldName){
+		List<FeatureCollection> areaLayers = new ArrayList<>();
 		Gson gson = getNewGson();
 		String areaListString = getDocField(id, fieldName);
 		AreasList areasList = gson.fromJson(areaListString, AreasList.class);
@@ -176,8 +176,8 @@ public class MongoDatabaseManager {
 		return areaLayers;
 	}
 
-	public  List<String> getAllLayers(String fieldName){
-		List<String> areaLayers = new ArrayList<>();
+	public List<FeatureCollection> getAllLayers(String fieldName){
+		List<FeatureCollection> areaLayers = new ArrayList<>();
 		List<Document> records = getSimpleRecords(mainCollection);
 		Gson gson = getNewGson();
 		for (Document record : records) {
@@ -218,27 +218,27 @@ public class MongoDatabaseManager {
 		return json;
 	}
 
-	public  List<String> getSOPLayersFromSurvey(String id) {
+	public List<FeatureCollection> getSOPLayersFromSurvey(String id) {
 		return getLayersFromSurvey(id, SOPFieldName);
 	}
 
-	public  List<String> getSCLayersFromSurvey(String id) {
+	public List<FeatureCollection> getSCLayersFromSurvey(String id) {
 		return getLayersFromSurvey(id, SCFieldName);
 	}
 
-	public  List<String> getCELayersFromSurvey(String id) {
+	public List<FeatureCollection> getCELayersFromSurvey(String id) {
 		return getLayersFromSurvey(id, CEFieldName);
 	}
 
-	public  List<String> getAllSOPLayers() {
+	public List<FeatureCollection> getAllSOPLayers() {
 		return getAllLayers(SOPFieldName);
 	}
 
-	public  List<String> getAllSCLayers() {
+	public List<FeatureCollection> getAllSCLayers() {
 		return getAllLayers(SCFieldName);
 	}
 
-	public  List<String> getAllCELayers() {
+	public List<FeatureCollection> getAllCELayers() {
 		return getAllLayers(CEFieldName);
 	}
 

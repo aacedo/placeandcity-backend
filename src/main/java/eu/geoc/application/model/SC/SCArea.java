@@ -1,6 +1,7 @@
 package eu.geoc.application.model.SC;
 
 import eu.geoc.application.model.BasicArea;
+import org.geojson.FeatureCollection;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -17,7 +18,7 @@ public class SCArea extends BasicArea {
         super();
     }
 
-    public SCArea(Boolean livingIn, String layer, SocialCapital socialCapital) {
+    public SCArea(Boolean livingIn, FeatureCollection layer, SocialCapital socialCapital) {
         super(livingIn, layer);
         this.socialCapital = socialCapital;
     }

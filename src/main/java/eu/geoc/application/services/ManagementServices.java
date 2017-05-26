@@ -1,27 +1,26 @@
 package eu.geoc.application.services;
 
 import com.google.gson.Gson;
-import eu.geoc.application.model.FinalComments;
 import eu.geoc.application.model.CE.CEAreasList;
+import eu.geoc.application.model.FinalComments;
 import eu.geoc.application.model.FirstData;
 import eu.geoc.application.model.LastData;
 import eu.geoc.application.model.SC.SCAreasList;
 import eu.geoc.application.model.SOP.SOPAreasList;
 import eu.geoc.application.model.UserDetails;
+import eu.geoc.application.persistence.FPGsonBuilder;
 import eu.geoc.application.persistence.MongoDatabaseManager;
 import eu.geoc.application.persistence.PersistenceBuilder;
-import eu.geoc.application.services.model.AllResult;
 import eu.geoc.application.services.model.IdResult;
 import eu.geoc.application.services.model.LayersResult;
 import eu.geoc.application.util.GeoJsonOperations;
 import org.bson.types.ObjectId;
+import org.geojson.FeatureCollection;
+import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
-import java.util.ArrayList;
 import java.util.List;
 
-import static eu.geoc.application.persistence.FPGsonBuilder.getNewGson;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
@@ -46,7 +45,7 @@ public class ManagementServices {
 	public String getSurveys() {
 		slotDB.connect();
 		List<String> docs = slotDB.getDocs();
-		Gson gson = new Gson();
+		Gson gson = FPGsonBuilder.getNewGson();
 		String json = gson.toJson(docs);
 		slotDB.disconnect();
 		return json;
@@ -56,7 +55,8 @@ public class ManagementServices {
 	@Path("lisbon_citizen")
 	public IdResult setHome(FirstData data) {
 		slotDB.connect();
-		Gson gson = new Gson();
+		data.setDate(new DateTime().toString());
+		Gson gson = FPGsonBuilder.getNewGson();
 		String json = gson.toJson(data);
 		ObjectId id = slotDB.insert(json);
 		slotDB.disconnect();
@@ -68,14 +68,14 @@ public class ManagementServices {
 	public LayersResult getAllSOP() {
 		try {
 			slotDB.connect();
-			List<String> allSopLayers = slotDB.getAllSOPLayers();
+			List<FeatureCollection> allSopLayers = slotDB.getAllSOPLayers();
 			slotDB.disconnect();
-			String joinGeoJson = GeoJsonOperations.joinGeoJson(allSopLayers);
+			FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(allSopLayers);
 			return new LayersResult("0", joinGeoJson);
 		}
 		catch (Exception e){
 			e.printStackTrace();
-			return new LayersResult("0", "");
+			return new LayersResult("0", null);
 		}
 	}
 
@@ -84,23 +84,22 @@ public class ManagementServices {
 	public LayersResult getSOPs(@PathParam("id") String id) {
 		try {
 			slotDB.connect();
-			List<String> sopLayers = slotDB.getSOPLayersFromSurvey(id);
+			List<FeatureCollection> sopLayers = slotDB.getSOPLayersFromSurvey(id);
 			slotDB.disconnect();
-			String joinGeoJson = GeoJsonOperations.joinGeoJson(sopLayers);
+			FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(sopLayers);
 			return new LayersResult(id, joinGeoJson);
 		}
 		catch (Exception e){
 			e.printStackTrace();
-			return new LayersResult("0", "");
+			return new LayersResult("0", null);
 		}
 	}
 
 	@POST
 	@Path("SOP_data")
-	public IdResult setSOP(String factorListJson) {
+	public IdResult setSOP(SOPAreasList data) {
 		try {
 			slotDB.connect();
-			SOPAreasList data = getNewGson().fromJson(factorListJson, SOPAreasList.class);		// Verification
 			slotDB.addSOPData(data);
 			slotDB.disconnect();
 			return new IdResult(data.getId());
@@ -116,14 +115,14 @@ public class ManagementServices {
 	public LayersResult getAllSC() {
 		try {
 			slotDB.connect();
-			List<String> allScLayers = slotDB.getAllSCLayers();
+			List<FeatureCollection> allScLayers = slotDB.getAllSCLayers();
 			slotDB.disconnect();
-			String joinGeoJson = GeoJsonOperations.joinGeoJson(allScLayers);
+			FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(allScLayers);
 			return new LayersResult("0", joinGeoJson);
 		}
 		catch (Exception e){
 			e.printStackTrace();
-			return new LayersResult("0", "");
+			return new LayersResult("0", null);
 		}
 	}
 
@@ -132,23 +131,22 @@ public class ManagementServices {
 	public LayersResult getSC(@PathParam("id") String id) {
 		try {
 			slotDB.connect();
-			List<String> scLayers = slotDB.getSCLayersFromSurvey(id);
+			List<FeatureCollection> scLayers = slotDB.getSCLayersFromSurvey(id);
 			slotDB.disconnect();
-			String joinGeoJson = GeoJsonOperations.joinGeoJson(scLayers);
+			FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(scLayers);
 			return new LayersResult(id, joinGeoJson);
 		}
 		catch (Exception e){
 			e.printStackTrace();
-			return new LayersResult("0", "");
+			return new LayersResult("0", null);
 		}
 	}
 
 	@POST
 	@Path("SC_data")
-	public IdResult setSC(String factorListJson) {
+	public IdResult setSC(SCAreasList data) {
 		try {
 			slotDB.connect();
-			SCAreasList data = getNewGson().fromJson(factorListJson, SCAreasList.class);		// Verification
 			slotDB.addSCData(data);
 			slotDB.disconnect();
 			return new IdResult(data.getId());
@@ -164,14 +162,14 @@ public class ManagementServices {
 	public LayersResult getAllCE() {
 		try {
 			slotDB.connect();
-			List<String> allCeLayers = slotDB.getAllCELayers();
+			List<FeatureCollection> allCeLayers = slotDB.getAllCELayers();
 			slotDB.disconnect();
-			String joinGeoJson = GeoJsonOperations.joinGeoJson(allCeLayers);
+			FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(allCeLayers);
 			return new LayersResult("0", joinGeoJson);
 		}
 		catch (Exception e){
 			e.printStackTrace();
-			return new LayersResult("0", "");
+			return new LayersResult("0", null);
 		}
 	}
 
@@ -180,23 +178,22 @@ public class ManagementServices {
 	public LayersResult getCE(@PathParam("id") String id) {
 		try {
 			slotDB.connect();
-			List<String> ceLayers = slotDB.getCELayersFromSurvey(id);
+			List<FeatureCollection> ceLayers = slotDB.getCELayersFromSurvey(id);
 			slotDB.disconnect();
-			String joinGeoJson = GeoJsonOperations.joinGeoJson(ceLayers);
+			FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(ceLayers);
 			return new LayersResult(id, joinGeoJson);
 		}
 		catch (Exception e){
 			e.printStackTrace();
-			return new LayersResult("0", "");
+			return new LayersResult("0", null);
 		}
 	}
 
 	@POST
 	@Path("CE_data")
-	public IdResult setCE(String factorListJson) {
+	public IdResult setCE(CEAreasList data) {
 		try {
 			slotDB.connect();
-			CEAreasList data = getNewGson().fromJson(factorListJson, CEAreasList.class);		// Verification
 			slotDB.addCEData(data);
 			slotDB.disconnect();
 			return new IdResult(data.getId());
@@ -209,10 +206,9 @@ public class ManagementServices {
 
 	@POST
 	@Path("finish")
-	public IdResult finish(String userDetailsString) {
+	public IdResult finish(UserDetails userDetails) {
 		try {
 			slotDB.connect();
-			UserDetails userDetails = getNewGson().fromJson(userDetailsString, UserDetails.class);		// Verification
 			slotDB.addUserDetails(userDetails);
 			slotDB.disconnect();
 			return new IdResult(userDetails.getId());
@@ -225,9 +221,8 @@ public class ManagementServices {
 
 	@POST
 	@Path("final_details")
-	public IdResult setFinalDetails(String finalDetailsData) {
+	public IdResult setFinalDetails(LastData finalDetails) {
 		slotDB.connect();
-		LastData finalDetails = getNewGson().fromJson(finalDetailsData, LastData.class);
 		slotDB.addFinalDetails(finalDetails);
 		slotDB.disconnect();
 		return new IdResult(finalDetails.getId());
@@ -235,9 +230,8 @@ public class ManagementServices {
 
 	@POST
 	@Path("comments")
-	public IdResult setFinalComments(String finalCommentsData) {
+	public IdResult setFinalComments(FinalComments finalComments) {
 		slotDB.connect();
-		FinalComments finalComments = getNewGson().fromJson(finalCommentsData, FinalComments.class);
 		slotDB.addFinalDetails(finalComments);
 		slotDB.disconnect();
 		return new IdResult(finalComments.getId());
@@ -291,9 +285,9 @@ public class ManagementServices {
 
 	@POST
 	@Path("getgeojson")
-	public IdResult getAllSOP(String id) {
+	public IdResult getAllSOP(String _id) {
 		try {
-			List<String> sopLayers = slotDB.getLayersFromSurvey(id);
+			List<String> sopLayers = slotDB.getLayersFromSurvey(_id);
 			return new IdResult("1");
 		}
 		catch (Exception e){
