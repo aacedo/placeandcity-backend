@@ -20,7 +20,7 @@ public class SCAreasList extends AreasList {
     }
 
     public SCAreasList(String id, List<SCAreasGroup> groups) {
-        super(id);
+        super();
         this.groups = groups;
     }
 

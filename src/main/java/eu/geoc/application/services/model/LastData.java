@@ -1,4 +1,6 @@
-package eu.geoc.application.model;
+package eu.geoc.application.services.model;
+
+import eu.geoc.application.model.UserEntry;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -8,26 +10,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement
-public class LastData {
-    private String id;
+public class LastData implements UserEntryFiller{
     private String mailUser;
     private String twitterName;
 
     public LastData() {
     }
 
-    public LastData(String id, String mailUser, String twitterName) {
-        this.id = id;
+    public LastData(String mailUser, String twitterName) {
         this.mailUser = mailUser;
         this.twitterName = twitterName;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getMailUser() {
@@ -44,5 +36,11 @@ public class LastData {
 
     public void setTwitterName(String twitterName) {
         this.twitterName = twitterName;
+    }
+
+    @Override
+    public void fill(UserEntry userEntry) {
+        userEntry.setMailUser(mailUser);
+        userEntry.setTwitterName(twitterName);
     }
 }

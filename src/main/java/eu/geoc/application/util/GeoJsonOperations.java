@@ -3,6 +3,14 @@ package eu.geoc.application.util;
 import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vividsolutions.jts.geom.Polygon;
+import eu.geoc.application.model.AreasList;
+import eu.geoc.application.model.BasicArea;
+import eu.geoc.application.model.CE.CEAreasList;
+import eu.geoc.application.model.SC.SCArea;
+import eu.geoc.application.model.SC.SCAreasGroup;
+import eu.geoc.application.model.SC.SCAreasList;
+import eu.geoc.application.model.SOP.SOPAreasList;
+import eu.geoc.application.model.UserEntry;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.GeoJsonObject;
@@ -11,7 +19,9 @@ import org.geojson.Geometry;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Copyright (C) 2016 Geotec. All right reserved.
@@ -21,6 +31,57 @@ import java.util.List;
 public class GeoJsonOperations {
     public enum Operations{
         UNION, INTERSECTION, DIFFERENCE
+    }
+
+
+    public static FeatureCollection getGeoJsonJoinEntries(List<UserEntry> userEntries) throws IOException {
+        List<FeatureCollection> geoJsonList = new ArrayList<>();
+        for (UserEntry userEntry : userEntries) {
+            SOPAreasList sop = (SOPAreasList) userEntry.getSOP();
+            for (BasicArea basicArea : sop.getAreas()) {
+                FeatureCollection layer = basicArea.getLayer();
+                for (Feature feature : layer) {
+                    Map<String, Object> properties = feature.getProperties();
+                    putBasicProperties("SOP", userEntry, properties);
+                }
+                geoJsonList.add(layer);
+            }
+
+            SCAreasList sc = (SCAreasList) userEntry.getSC();
+            for (SCAreasGroup group : sc.getGroups()) {
+                for (SCArea scArea : group.getAreas()) {
+                    FeatureCollection layer = scArea.getLayer();
+                    for (Feature feature : layer) {
+                        Map<String, Object> properties = feature.getProperties();
+                        putBasicProperties("SC", userEntry, properties);
+                        properties.put("bosc1", scArea.getSocialCapital().getBosc1());
+                        properties.put("bosc2", scArea.getSocialCapital().getBosc2());
+                        properties.put("brsc1", scArea.getSocialCapital().getBrsc1());
+                        properties.put("brsc2", scArea.getSocialCapital().getBrsc2());
+
+                    }
+                    geoJsonList.add(layer);
+                }
+            }
+
+            CEAreasList ce = (CEAreasList) userEntry.getCE();
+            for (BasicArea basicArea : ce.getAreas()) {
+                FeatureCollection layer = basicArea.getLayer();
+                for (Feature feature : layer) {
+                    Map<String, Object> properties = feature.getProperties();
+                    putBasicProperties("CE", userEntry, properties);
+                }
+                geoJsonList.add(layer);
+            }
+        }
+        return joinGeoJson(geoJsonList);
+    }
+
+    private static void putBasicProperties(String typeValue, UserEntry userEntry, Map<String, Object> properties) {
+        properties.put("Type", typeValue);
+        properties.put("Id", userEntry.getId());
+        properties.put("Date", userEntry.getDate());
+        properties.put("Email", userEntry.getMailUser());
     }
 
     public static FeatureCollection joinGeoJson(List<FeatureCollection> geoJsonList) throws IOException {

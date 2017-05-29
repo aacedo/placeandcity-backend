@@ -21,7 +21,7 @@ public class CEAreasList extends AreasList {
     }
 
     public CEAreasList(String id, CivicEngagement civicEngagement, List<CEArea> areas) {
-        super(id);
+        super();
         this.civicEngagement = civicEngagement;
         this.areas = areas;
     }

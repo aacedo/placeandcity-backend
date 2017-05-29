@@ -5,14 +5,16 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import eu.geoc.application.model.FinalComments;
+import eu.geoc.application.model.UserEntry;
+import eu.geoc.application.services.model.FinalComments;
 import eu.geoc.application.model.BasicArea;
 import eu.geoc.application.model.CE.CEAreasList;
 import eu.geoc.application.model.AreasList;
-import eu.geoc.application.model.LastData;
+import eu.geoc.application.services.model.LastData;
 import eu.geoc.application.model.SC.SCAreasList;
 import eu.geoc.application.model.SOP.SOPAreasList;
-import eu.geoc.application.model.UserDetails;
+import eu.geoc.application.services.model.UserDetails;
+import eu.geoc.application.services.model.UserEntryFiller;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.geojson.FeatureCollection;
@@ -91,10 +93,6 @@ public class MongoDatabaseManager {
 
 	//endregion
 
-	private List<String> getRecords(String collectionName){
-		return getRecords(collectionName, null);
-	}
-
 	private List<String> getRecords(String collectionName, Document filter){
 		List<String> info = new Vector<String>();
 
@@ -132,40 +130,27 @@ public class MongoDatabaseManager {
 		return id;
 	}
 
-	public ObjectId insert(String json){
-		return insertRecord(mainCollection, json);
+	public List<UserEntry> getEntries(){
+		List<Document> records = getSimpleRecords(mainCollection);
+		List<UserEntry> entries = new ArrayList<>();
+		Gson gson = getNewGson();
+		for (Document record : records) {
+			UserEntry userEntry = gson.fromJson(record.toJson(), UserEntry.class);
+			ObjectId id = record.getObjectId("_id");
+			userEntry.setId(id.toString());
+			entries.add(userEntry);
+		}
+		return entries;
 	}
 
-	public List<String>  getDocs(){
-		return getRecords(mainCollection);
-	}
-
-	public void updateRecord(String id, String fieldName, String data){
-		List<String> records = getRecords(mainCollection, new Document("_id", new ObjectId(id)));
-		Document doc = Document.parse(records.get(0));
-		Document docData = Document.parse(data);
-		doc.put(fieldName, docData);
-		MongoCollection<Document> collection = this.database.getCollection(mainCollection);
-		Document id1 = collection.findOneAndReplace(eq("_id", new ObjectId(id)), doc);
-	}
-
-	public void mergeAndUpdateRecord(String id, String data){
-		List<String> records = getRecords(mainCollection, new Document("_id", new ObjectId(id)));
-		Document doc = Document.parse(records.get(0));
-		Document parsed = Document.parse(data);
-		doc.putAll(parsed);
-		MongoCollection<Document> collection = this.database.getCollection(mainCollection);
-		Document id1 = collection.findOneAndReplace(eq("_id", new ObjectId(id)), doc);
-	}
-
-	public String getDocField(String id, String fieldName){
+	private String getDocField(String id, String fieldName){
 		List<String> records = getRecords(mainCollection, new Document("_id", new ObjectId(id)));
 		Document doc = Document.parse(records.get(0));
 		//Document sopDoc = Document.parse(doc.get(fieldName).toString());
 		return ((Document)doc.get(fieldName)).toJson();
 	}
 
-	public List<FeatureCollection> getLayersFromSurvey(String id, String fieldName){
+	private List<FeatureCollection> getLayersFromSurvey(String id, String fieldName){
 		List<FeatureCollection> areaLayers = new ArrayList<>();
 		Gson gson = getNewGson();
 		String areaListString = getDocField(id, fieldName);
@@ -176,7 +161,7 @@ public class MongoDatabaseManager {
 		return areaLayers;
 	}
 
-	public List<FeatureCollection> getAllLayers(String fieldName){
+	private List<FeatureCollection> getAllLayers(String fieldName){
 		List<FeatureCollection> areaLayers = new ArrayList<>();
 		List<Document> records = getSimpleRecords(mainCollection);
 		Gson gson = getNewGson();
@@ -193,29 +178,6 @@ public class MongoDatabaseManager {
 			}
 		}
 		return areaLayers;
-	}
-
-	public void addSOPData(SOPAreasList data){
-		String json = getJsonString(data);
-		updateRecord(data.getId(), SOPFieldName, json);
-	}
-
-	public void addSCData(SCAreasList data){
-		String json = getJsonString(data);
-		updateRecord(data.getId(), SCFieldName, json);
-	}
-
-	public void addCEData(CEAreasList data){
-		String json = getJsonString(data);
-		updateRecord(data.getId(), CEFieldName, json);
-	}
-
-	private String getJsonString(AreasList data) {
-		String id = data.getId();
-		data.setId(null);
-		String json = getNewGson().toJson(data, AreasList.class);
-		data.setId(id);
-		return json;
 	}
 
 	public List<FeatureCollection> getSOPLayersFromSurvey(String id) {
@@ -242,38 +204,20 @@ public class MongoDatabaseManager {
 		return getAllLayers(CEFieldName);
 	}
 
-	public void addUserDetails(UserDetails userDetails){
-		String id = userDetails.getId();
-		userDetails.setId(null);
-		String json = getNewGson().toJson(userDetails);
-		userDetails.setId(id);
-		mergeAndUpdateRecord(userDetails.getId(), json);
+	public void addDetails(String id, UserEntryFiller filler){
+		List<String> records = getRecords(mainCollection, new Document("_id", new ObjectId(id)));
+		Gson gson = getNewGson();
+		UserEntry userEntry = gson.fromJson(records.get(0), UserEntry.class);
+		filler.fill(userEntry);
+		Document doc = Document.parse(gson.toJson(userEntry));
+		MongoCollection<Document> collection = this.database.getCollection(mainCollection);
+		collection.findOneAndReplace(eq("_id", new ObjectId(id)), doc);
 	}
 
-	public void addFinalDetails(LastData lastData){
-		String id = lastData.getId();
-		lastData.setId(null);
-		String json = getNewGson().toJson(lastData);
-		lastData.setId(id);
-		mergeAndUpdateRecord(lastData.getId(), json);
-	}
-
-	public void addFinalDetails(FinalComments finalComments){
-		String id = finalComments.getId();
-		finalComments.setId(null);
-		String json = getNewGson().toJson(finalComments);
-		finalComments.setId(id);
-		mergeAndUpdateRecord(finalComments.getId(), json);
-	}
-
-	public List<AreasList> getAll(){
-		List<Document> records = getSimpleRecords(mainCollection);
-		List<AreasList> all = new ArrayList<>();
-		for (Document record : records) {
-			String json = record.toJson();
-			AreasList data = getNewGson().fromJson(json, AreasList.class);
-			all.add(data);
-		}
-		return all;
+	public String insertUserDetails(UserEntryFiller filler){
+		UserEntry userEntry = new UserEntry();
+		filler.fill(userEntry);
+		ObjectId id = insertRecord(mainCollection, getNewGson().toJson(userEntry));
+		return id.toString();
 	}
 }

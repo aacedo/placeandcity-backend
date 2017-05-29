@@ -1,24 +1,19 @@
 package eu.geoc.application.services;
 
-import com.google.gson.Gson;
 import eu.geoc.application.model.CE.CEAreasList;
-import eu.geoc.application.model.FinalComments;
-import eu.geoc.application.model.FirstData;
-import eu.geoc.application.model.LastData;
 import eu.geoc.application.model.SC.SCAreasList;
 import eu.geoc.application.model.SOP.SOPAreasList;
-import eu.geoc.application.model.UserDetails;
+import eu.geoc.application.model.UserEntry;
 import eu.geoc.application.persistence.FPGsonBuilder;
 import eu.geoc.application.persistence.MongoDatabaseManager;
 import eu.geoc.application.persistence.PersistenceBuilder;
-import eu.geoc.application.services.model.IdResult;
-import eu.geoc.application.services.model.LayersResult;
+import eu.geoc.application.services.model.*;
 import eu.geoc.application.util.GeoJsonOperations;
-import org.bson.types.ObjectId;
 import org.geojson.FeatureCollection;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
+import java.io.IOException;
 import java.util.List;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -42,13 +37,8 @@ public class ManagementServices {
 	}
 
 	@GET
-	public String getSurveys() {
-		slotDB.connect();
-		List<String> docs = slotDB.getDocs();
-		Gson gson = FPGsonBuilder.getNewGson();
-		String json = gson.toJson(docs);
-		slotDB.disconnect();
-		return json;
+	public String getHomeString() {
+		return "home";
 	}
 
 	@POST
@@ -56,11 +46,9 @@ public class ManagementServices {
 	public IdResult setHome(FirstData data) {
 		slotDB.connect();
 		data.setDate(new DateTime().toString());
-		Gson gson = FPGsonBuilder.getNewGson();
-		String json = gson.toJson(data);
-		ObjectId id = slotDB.insert(json);
+		String id = slotDB.insertUserDetails(data);
 		slotDB.disconnect();
-		return new IdResult(id.toString());
+		return new IdResult(id);
 	}
 
 	@GET
@@ -96,13 +84,13 @@ public class ManagementServices {
 	}
 
 	@POST
-	@Path("SOP_data")
-	public IdResult setSOP(SOPAreasList data) {
+	@Path("SOP_data/{id}")
+	public IdResult setSOP(@PathParam("id") String id, SOPAreasList data) {
 		try {
 			slotDB.connect();
-			slotDB.addSOPData(data);
+			slotDB.addDetails(id, new SOPFiller(data));
 			slotDB.disconnect();
-			return new IdResult(data.getId());
+			return new IdResult(id);
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -143,13 +131,13 @@ public class ManagementServices {
 	}
 
 	@POST
-	@Path("SC_data")
-	public IdResult setSC(SCAreasList data) {
+	@Path("SC_data/{id}")
+	public IdResult setSC(@PathParam("id") String id, SCAreasList data) {
 		try {
 			slotDB.connect();
-			slotDB.addSCData(data);
+			slotDB.addDetails(id, new SCFiller(data));
 			slotDB.disconnect();
-			return new IdResult(data.getId());
+			return new IdResult(id);
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -190,13 +178,13 @@ public class ManagementServices {
 	}
 
 	@POST
-	@Path("CE_data")
-	public IdResult setCE(CEAreasList data) {
+	@Path("CE_data/{id}")
+	public IdResult setCE(@PathParam("id") String id, CEAreasList data) {
 		try {
 			slotDB.connect();
-			slotDB.addCEData(data);
+			slotDB.addDetails(id, new CEFiller(data));
 			slotDB.disconnect();
-			return new IdResult(data.getId());
+			return new IdResult(id);
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -205,13 +193,13 @@ public class ManagementServices {
 	}
 
 	@POST
-	@Path("finish")
-	public IdResult finish(UserDetails userDetails) {
+	@Path("finish/{id}")
+	public IdResult finish(@PathParam("id") String id, UserDetails userDetails) {
 		try {
 			slotDB.connect();
-			slotDB.addUserDetails(userDetails);
+			slotDB.addDetails(id, userDetails);
 			slotDB.disconnect();
-			return new IdResult(userDetails.getId());
+			return new IdResult(id);
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -220,21 +208,21 @@ public class ManagementServices {
 	}
 
 	@POST
-	@Path("final_details")
-	public IdResult setFinalDetails(LastData finalDetails) {
+	@Path("final_details/{id}")
+	public IdResult setFinalDetails(@PathParam("id") String id, LastData finalDetails) {
 		slotDB.connect();
-		slotDB.addFinalDetails(finalDetails);
+		slotDB.addDetails(id, finalDetails);
 		slotDB.disconnect();
-		return new IdResult(finalDetails.getId());
+		return new IdResult(id);
 	}
 
 	@POST
-	@Path("comments")
-	public IdResult setFinalComments(FinalComments finalComments) {
+	@Path("comments/{id}")
+	public IdResult setFinalComments(@PathParam("id") String id, FinalComments finalComments) {
 		slotDB.connect();
-		slotDB.addFinalDetails(finalComments);
+		slotDB.addDetails(id, finalComments);
 		slotDB.disconnect();
-		return new IdResult(finalComments.getId());
+		return new IdResult(id);
 	}
 
 	@GET
@@ -242,16 +230,26 @@ public class ManagementServices {
 	@Produces(TEXT_PLAIN)
 	public String getItAll() {
 		slotDB.connect();
-		List<String> all = slotDB.getDocs();
-		String str ="[";
-		for (String s : all) {
-			str = str + s + ",";
-		}
-		str = str.substring(0, str.length()-1);
-		str = str + "]";
-		str = str.replace("\\\"", "\"").replace("\"{", "{").replace("}\"", "}");
+		String json = FPGsonBuilder.getNewGson().toJson(slotDB.getEntries());
 		slotDB.disconnect();
-		return str;
+		return json;
+	}
+
+	@GET
+	@Path("geom")
+	public LayersResult getAllGeometries() {
+		try {
+			slotDB.connect();
+			List<UserEntry> entries = slotDB.getEntries();
+			FeatureCollection geoJsonJoinEntries = GeoJsonOperations.getGeoJsonJoinEntries(entries);
+			return new LayersResult("0", geoJsonJoinEntries);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		finally {
+			slotDB.disconnect();
+		}
 	}
 
 	//region Commented to be used as example

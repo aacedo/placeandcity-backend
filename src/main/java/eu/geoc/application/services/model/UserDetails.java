@@ -1,4 +1,6 @@
-package eu.geoc.application.model;
+package eu.geoc.application.services.model;
+
+import eu.geoc.application.model.UserEntry;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -8,8 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement
-public class UserDetails {
-    private String id;
+public class UserDetails implements UserEntryFiller{
     private Integer gender;
     private Integer age;
     private String country;
@@ -20,22 +21,13 @@ public class UserDetails {
     public UserDetails() {
     }
 
-    public UserDetails(String id, Integer gender, Integer age, String country, Integer study, Integer profession, Integer income) {
-        this.id = id;
+    public UserDetails(Integer gender, Integer age, String country, Integer study, Integer profession, Integer income) {
         this.gender = gender;
         this.age = age;
         this.country = country;
         this.study = study;
         this.profession = profession;
         this.income = income;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Integer getGender() {
@@ -84,5 +76,15 @@ public class UserDetails {
 
     public void setIncome(Integer income) {
         this.income = income;
+    }
+
+    @Override
+    public void fill(UserEntry userEntry) {
+        userEntry.setGender(gender);
+        userEntry.setAge(age);
+        userEntry.setCountry(country);
+        userEntry.setStudy(study);
+        userEntry.setProfession(profession);
+        userEntry.setIncome(income);
     }
 }

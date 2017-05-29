@@ -20,7 +20,7 @@ public class SOPAreasList extends AreasList {
     }
 
     public SOPAreasList(String id, List<SOPArea> areas) {
-        super(id);
+        super();
         this.areas = areas;
     }
 

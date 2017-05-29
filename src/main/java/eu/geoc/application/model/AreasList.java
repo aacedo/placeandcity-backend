@@ -11,21 +11,8 @@ import java.util.List;
 
 @XmlRootElement
 public abstract class AreasList {
-    protected String id;
 
     public AreasList() {
-    }
-
-    public AreasList(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public abstract List<? extends BasicArea> getAreas();

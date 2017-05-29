@@ -1,4 +1,6 @@
-package eu.geoc.application.model;
+package eu.geoc.application.services.model;
+
+import eu.geoc.application.model.UserEntry;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -8,8 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement
-public class FinalComments {
-    private String id;
+public class FinalComments implements UserEntryFiller{
     private Integer di1;
     private Integer dm1;
     private String comment;
@@ -17,19 +18,10 @@ public class FinalComments {
     public FinalComments() {
     }
 
-    public FinalComments(String id, Integer di1, Integer dm1, String comment) {
-        this.id = id;
+    public FinalComments(Integer di1, Integer dm1, String comment) {
         this.di1 = di1;
         this.dm1 = dm1;
         this.comment = comment;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Integer getDi1() {
@@ -54,5 +46,12 @@ public class FinalComments {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    @Override
+    public void fill(UserEntry userEntry) {
+        userEntry.setDi1(di1);
+        userEntry.setDm1(dm1);
+        userEntry.setComment(comment);
     }
 }

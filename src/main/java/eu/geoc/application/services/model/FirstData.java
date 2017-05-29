@@ -1,4 +1,6 @@
-package eu.geoc.application.model;
+package eu.geoc.application.services.model;
+
+import eu.geoc.application.model.UserEntry;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
@@ -8,14 +10,13 @@ import java.util.List;
  */
 
 @XmlRootElement
-public class FirstData {
+public class FirstData implements UserEntryFiller{
     private boolean home;
     private Integer freguesia;
     private Integer howlong;
     private String zip;
     private List<Integer> problem;
     private String date;
-
 
     public FirstData() {
     }
@@ -75,5 +76,15 @@ public class FirstData {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public void fill(UserEntry userEntry) {
+        userEntry.setHome(home);
+        userEntry.setFreguesia(freguesia);
+        userEntry.setHowlong(howlong);
+        userEntry.setZip(zip);
+        userEntry.setProblem(problem);
+        userEntry.setDate(date);
     }
 }
