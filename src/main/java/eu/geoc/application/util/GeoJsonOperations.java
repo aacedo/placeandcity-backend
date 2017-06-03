@@ -38,40 +38,47 @@ public class GeoJsonOperations {
         List<FeatureCollection> geoJsonList = new ArrayList<>();
         for (UserEntry userEntry : userEntries) {
             SOPAreasList sop = (SOPAreasList) userEntry.getSOP();
-            for (BasicArea basicArea : sop.getAreas()) {
-                FeatureCollection layer = basicArea.getLayer();
-                for (Feature feature : layer) {
-                    Map<String, Object> properties = feature.getProperties();
-                    putBasicProperties("SOP", userEntry, properties);
-                }
-                geoJsonList.add(layer);
-            }
-
-            SCAreasList sc = (SCAreasList) userEntry.getSC();
-            for (SCAreasGroup group : sc.getGroups()) {
-                for (SCArea scArea : group.getAreas()) {
-                    FeatureCollection layer = scArea.getLayer();
+            if(sop != null) {
+                for (BasicArea basicArea : sop.getAreas()) {
+                    FeatureCollection layer = basicArea.getLayer();
                     for (Feature feature : layer) {
                         Map<String, Object> properties = feature.getProperties();
-                        putBasicProperties("SC", userEntry, properties);
-                        properties.put("bosc1", scArea.getSocialCapital().getBosc1());
-                        properties.put("bosc2", scArea.getSocialCapital().getBosc2());
-                        properties.put("brsc1", scArea.getSocialCapital().getBrsc1());
-                        properties.put("brsc2", scArea.getSocialCapital().getBrsc2());
-
+                        putBasicProperties("SOP", userEntry, properties);
                     }
                     geoJsonList.add(layer);
                 }
             }
 
-            CEAreasList ce = (CEAreasList) userEntry.getCE();
-            for (BasicArea basicArea : ce.getAreas()) {
-                FeatureCollection layer = basicArea.getLayer();
-                for (Feature feature : layer) {
-                    Map<String, Object> properties = feature.getProperties();
-                    putBasicProperties("CE", userEntry, properties);
+            SCAreasList sc = (SCAreasList) userEntry.getSC();
+            if (sc != null) {
+                for (SCAreasGroup group : sc.getGroups()) {
+                    for (SCArea scArea : group.getAreas()) {
+                        FeatureCollection layer = scArea.getLayer();
+                        for (Feature feature : layer) {
+                            Map<String, Object> properties = feature.getProperties();
+                            putBasicProperties("SC", userEntry, properties);
+                            properties.put("bosc1", scArea.getSocialCapital().getBosc1());
+                            properties.put("bosc2", scArea.getSocialCapital().getBosc2());
+                            properties.put("brsc1", scArea.getSocialCapital().getBrsc1());
+                            properties.put("brsc2", scArea.getSocialCapital().getBrsc2());
+
+                        }
+                        geoJsonList.add(layer);
+                    }
                 }
-                geoJsonList.add(layer);
+            }
+
+            CEAreasList ce = (CEAreasList) userEntry.getCE();
+            if(ce != null) {
+                for (BasicArea basicArea : ce.getAreas()) {
+                    FeatureCollection layer = basicArea.getLayer();
+                    for (Feature feature : layer) {
+                        Map<String, Object> properties = feature.getProperties();
+                        putBasicProperties("CE", userEntry, properties);
+                    }
+                    geoJsonList.add(layer);
+
+                }
             }
         }
         return joinGeoJson(geoJsonList);

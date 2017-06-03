@@ -4,6 +4,7 @@ import eu.geoc.application.model.BasicArea;
 import eu.geoc.application.model.AreasList;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ public class SOPAreasList extends AreasList {
 
     public SOPAreasList() {
         super();
+        this.areas = new ArrayList<>();
     }
 
     public SOPAreasList(String id, List<SOPArea> areas) {

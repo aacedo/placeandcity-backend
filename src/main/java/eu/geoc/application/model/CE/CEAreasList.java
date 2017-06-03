@@ -4,6 +4,7 @@ import eu.geoc.application.model.BasicArea;
 import eu.geoc.application.model.AreasList;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ public class CEAreasList extends AreasList {
 
     public CEAreasList() {
         super();
+        this.areas = new ArrayList<>();
     }
 
     public CEAreasList(String id, CivicEngagement civicEngagement, List<CEArea> areas) {

@@ -17,6 +17,7 @@ public class SCAreasList extends AreasList {
     private List<SCAreasGroup> groups;
 
     public SCAreasList() {
+        this.groups = new ArrayList<>();
     }
 
     public SCAreasList(String id, List<SCAreasGroup> groups) {

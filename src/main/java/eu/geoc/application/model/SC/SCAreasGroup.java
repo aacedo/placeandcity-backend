@@ -1,6 +1,7 @@
 package eu.geoc.application.model.SC;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +16,7 @@ public class SCAreasGroup {
     private List<SCArea> areas;
 
     public SCAreasGroup() {
+        this.areas = new ArrayList<>();
     }
 
     public SCAreasGroup(String name, List<SCArea> areas, SCDimensions dimensions) {
