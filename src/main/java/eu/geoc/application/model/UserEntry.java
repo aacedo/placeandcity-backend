@@ -1,9 +1,5 @@
 package eu.geoc.application.model;
 
-import eu.geoc.application.model.CE.CEAreasList;
-import eu.geoc.application.model.SC.SCAreasList;
-import eu.geoc.application.model.SOP.SOPAreasList;
-
 import java.util.List;
 
 /**
@@ -25,12 +21,13 @@ public class UserEntry {
     public UserEntry() {
     }
 
-    public UserEntry(String id, AreasList SOP, AreasList SC, AreasList CE, boolean home, Integer freguesia, Integer howlong, String zip, List<Integer> problem, String date, Integer gender, Integer age, String country, Integer study, Integer profession, Integer income, String mailUser, String twitterName, Integer di1, Integer dm1, String comment) {
+    public UserEntry(String id, AreasList SOP, AreasList SC, AreasList CE, boolean home, boolean portugal, Integer freguesia, Integer howlong, String zip, List<Integer> problem, String date, Integer gender, Integer age, String country, Integer study, Integer profession, Integer income, String mailUser, String twitterName, Integer di1, Integer dm1, String comment) {
         this.id = id;
         this.SOP = SOP;
         this.SC = SC;
         this.CE = CE;
         this.home = home;
+        this.portugal = portugal;
         this.freguesia = freguesia;
         this.howlong = howlong;
         this.zip = zip;
@@ -81,19 +78,28 @@ public class UserEntry {
     //endregion
 
     //region FirstData
-    private boolean home;
+    private Boolean home;
+    private Boolean portugal;
     private Integer freguesia;
     private Integer howlong;
     private String zip;
     private List<Integer> problem;
     private String date;
 
-    public boolean isHome() {
+    public Boolean isHome() {
         return home;
     }
 
-    public void setHome(boolean home) {
+    public void setHome(Boolean home) {
         this.home = home;
+    }
+
+    public Boolean isPortugal() {
+        return portugal;
+    }
+
+    public void setPortugal(Boolean portugal) {
+        this.portugal = portugal;
     }
 
     public Integer getFreguesia() {

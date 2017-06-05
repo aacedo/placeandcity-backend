@@ -89,6 +89,11 @@ public class GeoJsonOperations {
         properties.put("Id", userEntry.getId());
         properties.put("Date", userEntry.getDate());
         properties.put("Email", userEntry.getMailUser());
+        properties.put("Howlong", userEntry.getHowlong());
+        properties.put("Freguesia", userEntry.getFreguesia());
+        properties.put("ZipCode", userEntry.getZip());
+        properties.put("Country", userEntry.getCountry());
+        properties.put("Home", userEntry.isHome());
     }
 
     public static FeatureCollection joinGeoJson(List<FeatureCollection> geoJsonList) throws IOException {
