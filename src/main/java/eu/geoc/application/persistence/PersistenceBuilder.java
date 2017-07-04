@@ -20,9 +20,15 @@ public class PersistenceBuilder {
     private PersistenceBuilder() {
     }
 
-    public void defInit() {
+    public void mainInit() {
         MongoDatabaseManager.MongoDBManagerConfig configsMGDB = new MongoDatabaseManager.MongoDBManagerConfig(
                 "127.0.0.1", 27017, "surveys", "mainCollection");
+        mongoDatabaseManager = new MongoDatabaseManager(configsMGDB);
+    }
+
+    public void postInit() {
+        MongoDatabaseManager.MongoDBManagerConfig configsMGDB = new MongoDatabaseManager.MongoDBManagerConfig(
+                "127.0.0.1", 27017, "surveys", "postCollection");
         mongoDatabaseManager = new MongoDatabaseManager(configsMGDB);
     }
 

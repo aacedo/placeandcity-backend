@@ -1,5 +1,6 @@
 package eu.geoc.application.services;
 
+import com.google.gson.Gson;
 import eu.geoc.application.model.CE.CEAreasList;
 import eu.geoc.application.model.SC.SCAreasList;
 import eu.geoc.application.model.SOP.SOPAreasList;
@@ -13,8 +14,13 @@ import org.geojson.FeatureCollection;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
@@ -28,7 +34,7 @@ public class ManagementServices {
 
 	public ManagementServices() {
 		super();
-		PersistenceBuilder.getInstance().defInit();
+		PersistenceBuilder.getInstance().mainInit();
 		slotDB = PersistenceBuilder.getInstance().getMongoDatabaseManager();
 	}
 
@@ -246,6 +252,40 @@ public class ManagementServices {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
+		}
+		finally {
+			slotDB.disconnect();
+		}
+	}
+
+	@GET
+	@Path("usergeoms")
+	@Produces("application/zip")
+	public Response getByUserGeoms() {
+		try {
+			slotDB.connect();
+			List<UserEntry> entries = slotDB.getEntries();
+			HashMap<String, FeatureCollection> usersGeoJsons = GeoJsonOperations.getGeoJsonJoinEntriesPerID(entries);
+			Gson gson = FPGsonBuilder.getNewGson();
+
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			try(ZipOutputStream zos = new ZipOutputStream(byteArrayOutputStream)) {
+				for (String id : usersGeoJsons.keySet()) {
+					zos.putNextEntry(new ZipEntry(id + ".txt"));
+					String json = gson.toJson(usersGeoJsons.get(id));
+					zos.write(json.getBytes());
+					zos.closeEntry();
+				}
+			} catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
+
+			return Response.ok(byteArrayOutputStream.toByteArray(), "application/zip")
+					.header("Content-Disposition", "attachment; filename=\"" + "geoms.zip" + "\"" ) //optional
+					.build();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.serverError().build();
 		}
 		finally {
 			slotDB.disconnect();

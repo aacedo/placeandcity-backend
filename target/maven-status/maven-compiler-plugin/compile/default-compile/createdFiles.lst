@@ -18,6 +18,7 @@ eu\geoc\application\model\BasicArea.class
 eu\geoc\application\services\model\DescriptiveResult.class
 eu\geoc\application\model\CE\CivicEngagement.class
 eu\geoc\application\persistence\PersistenceBuilder.class
+eu\geoc\application\services\PostManagementServices.class
 eu\geoc\application\model\SC\SCAreasGroup.class
 eu\geoc\application\model\SOP\SOPPredictors.class
 eu\geoc\application\services\model\LastData.class
