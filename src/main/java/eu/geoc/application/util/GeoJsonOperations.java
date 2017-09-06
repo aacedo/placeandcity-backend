@@ -50,6 +50,10 @@ public class GeoJsonOperations {
     public static final String PROBLEM_KEY = "Problem";
     public static final String NAME_KEY = "Name";
 
+
+    public static final String USER_TYPE = "user_type";
+
+
     public static final String SOP_TYPE_VALUE = "SOP";
     public static final String SOP_COUNT = "SopCount";
     public static final String NA_1_KEY = "Na1";
@@ -123,14 +127,44 @@ public class GeoJsonOperations {
     private static List<FeatureCollection> getUserFeatureCollections(UserEntry userEntry) {
         int sopAreasCount = 0, scAreasCount = 0, ceAreasCount = 0;
         List<FeatureCollection> userGeoJsonList = new ArrayList<>();
+
         SOPAreasList sop = (SOPAreasList) userEntry.getSOP();
+        SCAreasList sc = (SCAreasList) userEntry.getSC();
+        CEAreasList ce = (CEAreasList) userEntry.getCE();
+
+        //region areas counting
         if(sop != null) {
-            //region sopAreasCount
             for (BasicArea basicArea : sop.getAreas()) {
                 SOPArea sopArea = (SOPArea) basicArea;
                 sopAreasCount += sopArea.getLayer().getFeatures().size();
             }
-            //endregion
+        }
+        if (sc != null) {
+            for (SCAreasGroup group : sc.getGroups()) {
+                for (SCArea scArea : group.getAreas()) {
+                    scAreasCount += scArea.getLayer().getFeatures().size();
+                }
+            }
+        }
+        if(ce != null) {
+            for (BasicArea basicArea : ce.getAreas()) {
+                CEArea ceArea = (CEArea) basicArea;
+                ceAreasCount += ceArea.getLayer().getFeatures().size();
+            }
+        }
+        //endregion
+
+        //region userType determination
+        int sopBit = (sopAreasCount > 0) ? 16 : 0;
+        int scBit = (scAreasCount > 0) ? 8 : 0;
+        int ceBit = (ceAreasCount > 0) ? 4 : 0;
+        int emailTwitterBit = (userEntry.getMailUser() != null && !userEntry.getMailUser().isEmpty()) ||
+                (userEntry.getTwitterName() != null && !userEntry.getTwitterName().isEmpty())? 2 : 0;
+        int freguesiaBit = (userEntry.getFreguesia() != null && userEntry.getFreguesia() > 0) ? 1 : 0;
+        int userType = sopBit | scBit | ceBit | emailTwitterBit | freguesiaBit;
+        //endregion
+
+        if(sop != null) {
             for (BasicArea basicArea : sop.getAreas()) {
                 SOPArea sopArea = (SOPArea) basicArea;
                 FeatureCollection layer = sopArea.getLayer();
@@ -138,6 +172,7 @@ public class GeoJsonOperations {
                     Map<String, Object> properties = feature.getProperties();
                     putBasicProperties(SOP_TYPE_VALUE, userEntry, properties);
                     conditionalPut(properties, SOP_COUNT, sopAreasCount);
+                    conditionalPut(properties, USER_TYPE, userType);
 
                     conditionalPut(properties, NAME_KEY, sopArea.getName());
                     conditionalPut(properties, LIVING_IN_KEY, sopArea.getLivingIn());
@@ -165,15 +200,8 @@ public class GeoJsonOperations {
             }
         }
 
-        SCAreasList sc = (SCAreasList) userEntry.getSC();
+
         if (sc != null) {
-            //region scAreasCount
-            for (SCAreasGroup group : sc.getGroups()) {
-                for (SCArea scArea : group.getAreas()) {
-                    scAreasCount += scArea.getLayer().getFeatures().size();
-                }
-            }
-            //endregion
             for (SCAreasGroup group : sc.getGroups()) {
                 for (SCArea scArea : group.getAreas()) {
                     FeatureCollection layer = scArea.getLayer();
@@ -181,6 +209,7 @@ public class GeoJsonOperations {
                         Map<String, Object> properties = feature.getProperties();
                         putBasicProperties(SC_TYPE_VALUE, userEntry, properties);
                         conditionalPut(properties, SC_COUNT, scAreasCount);
+                        conditionalPut(properties, USER_TYPE, userType);
 
                         conditionalPut(properties, LIVING_IN_KEY, scArea.getLivingIn());
 
@@ -212,14 +241,8 @@ public class GeoJsonOperations {
             }
         }
 
-        CEAreasList ce = (CEAreasList) userEntry.getCE();
+
         if(ce != null) {
-            //region ceAreasCount
-            for (BasicArea basicArea : ce.getAreas()) {
-                CEArea ceArea = (CEArea) basicArea;
-                ceAreasCount += ceArea.getLayer().getFeatures().size();
-            }
-            //endregion
             for (BasicArea basicArea : ce.getAreas()) {
                 CEArea ceArea = (CEArea) basicArea;
                 FeatureCollection layer = ceArea.getLayer();
@@ -227,6 +250,7 @@ public class GeoJsonOperations {
                     Map<String, Object> properties = feature.getProperties();
                     putBasicProperties(CE_TYPE_VALUE, userEntry, properties);
                     conditionalPut(properties, CE_COUNT, ceAreasCount);
+                    conditionalPut(properties, USER_TYPE, userType);
 
                     conditionalPut(properties, LIVING_IN_KEY, ceArea.getLivingIn());
 
@@ -239,6 +263,8 @@ public class GeoJsonOperations {
                 userGeoJsonList.add(layer);
             }
         }
+
+
         return userGeoJsonList;
     }
 

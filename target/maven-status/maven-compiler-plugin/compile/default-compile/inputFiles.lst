@@ -2,6 +2,7 @@ D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\ManagementS
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\model\FinalComments.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\model\LastData.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\model\SOP\SOPPredictors.java
+D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\ESRIManagementServices.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\model\SOP\SOPAreasList.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\model\UserEntry.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\model\SCFiller.java
@@ -16,9 +17,11 @@ D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\model\CE\CivicEngage
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\persistence\FPGsonBuilder.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\persistence\MongoDatabaseManager.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\model\BasicArea.java
+D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\PostManagementServices.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\CORSFilter.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\model\CE\CEArea.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\model\LayersResult.java
+D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\BaseManagementServices.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\model\CE\CEAreasList.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\model\FirstData.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\util\GeoJsonOperations.java
@@ -35,5 +38,6 @@ D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\model\AreasList.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\persistence\PersistenceBuilder.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\model\DescriptiveResult.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\model\UserDetails.java
+D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\test\SimpleTest.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\model\SOPFiller.java
 D:\German\AlbertWS\albert\src\main\java\eu\geoc\application\services\model\IdResult.java

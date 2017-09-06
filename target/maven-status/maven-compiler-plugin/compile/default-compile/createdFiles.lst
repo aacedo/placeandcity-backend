@@ -1,4 +1,5 @@
 eu\geoc\application\model\SOP\SOPArea.class
+eu\geoc\application\services\BaseManagementServices.class
 eu\geoc\application\util\GeoJsonOperations$1.class
 eu\geoc\application\model\SC\SCAreasList.class
 eu\geoc\application\services\model\UserEntryFiller.class

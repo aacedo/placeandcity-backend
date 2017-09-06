@@ -32,6 +32,12 @@ public class PersistenceBuilder {
         mongoDatabaseManager = new MongoDatabaseManager(configsMGDB);
     }
 
+    public void esriInit() {
+        MongoDatabaseManager.MongoDBManagerConfig configsMGDB = new MongoDatabaseManager.MongoDBManagerConfig(
+                "127.0.0.1", 27017, "surveys", "esriCollection");
+        mongoDatabaseManager = new MongoDatabaseManager(configsMGDB);
+    }
+
     public MongoDatabaseManager getMongoDatabaseManager() {
         return mongoDatabaseManager;
     }

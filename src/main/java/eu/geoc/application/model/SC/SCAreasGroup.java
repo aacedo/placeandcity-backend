@@ -14,15 +14,17 @@ public class SCAreasGroup {
     private String name;
     private SCDimensions dimensions;
     private List<SCArea> areas;
+    private String nature;
 
     public SCAreasGroup() {
         this.areas = new ArrayList<>();
     }
 
-    public SCAreasGroup(String name, List<SCArea> areas, SCDimensions dimensions) {
+    public SCAreasGroup(String name, List<SCArea> areas, SCDimensions dimensions, String nature) {
         this.name = name;
         this.areas = areas;
         this.dimensions = dimensions;
+        this.nature = nature;
     }
 
     public String getName() {
@@ -47,5 +49,13 @@ public class SCAreasGroup {
 
     public void setDimensions(SCDimensions dimensions) {
         this.dimensions = dimensions;
+    }
+
+    public String getNature() {
+        return nature;
+    }
+
+    public void setNature(String nature) {
+        this.nature = nature;
     }
 }

@@ -10,12 +10,12 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Consumes({APPLICATION_JSON})
 @Produces({APPLICATION_JSON})
-@Path("home")
-public class ManagementServices extends BaseManagementServices {
+@Path("esri")
+public class ESRIManagementServices extends BaseManagementServices {
 
-	public ManagementServices() {
+	public ESRIManagementServices() {
 		super();
-		PersistenceBuilder.getInstance().mainInit();
+		PersistenceBuilder.getInstance().esriInit();
 		this.slotDB = PersistenceBuilder.getInstance().getMongoDatabaseManager();
 	}
 }

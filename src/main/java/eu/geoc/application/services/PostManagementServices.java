@@ -28,23 +28,12 @@ import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 @Consumes({APPLICATION_JSON})
 @Produces({APPLICATION_JSON})
 @Path("post")
-public class PostManagementServices {
-
-	private MongoDatabaseManager slotDB;
+public class PostManagementServices extends BaseManagementServices{
 
 	public PostManagementServices() {
 		super();
 		PersistenceBuilder.getInstance().postInit();
-		slotDB = PersistenceBuilder.getInstance().getMongoDatabaseManager();
-	}
-
-	public Long getTimeStamp(){
-		return (System.currentTimeMillis() / 1000L)-1;
-	}
-
-	@GET
-	public String getHomeString() {
-		return "home";
+		this.slotDB = PersistenceBuilder.getInstance().getMongoDatabaseManager();
 	}
 
 	@POST
