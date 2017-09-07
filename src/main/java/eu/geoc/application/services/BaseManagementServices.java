@@ -1,26 +1,14 @@
 package eu.geoc.application.services;
 
-import com.google.gson.Gson;
 import eu.geoc.application.model.CE.CEAreasList;
 import eu.geoc.application.model.SC.SCAreasList;
 import eu.geoc.application.model.SOP.SOPAreasList;
-import eu.geoc.application.model.UserEntry;
-import eu.geoc.application.persistence.FPGsonBuilder;
-import eu.geoc.application.persistence.MongoDatabaseManager;
-import eu.geoc.application.persistence.PersistenceBuilder;
 import eu.geoc.application.services.model.*;
-import eu.geoc.application.util.GeoJsonOperations;
 import org.geojson.FeatureCollection;
-import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
@@ -30,7 +18,7 @@ import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
  */
 
 public class BaseManagementServices {
-    protected MongoDatabaseManager slotDB;
+    protected MongoDAO dao;
 
     public BaseManagementServices() {
         super();
@@ -48,245 +36,111 @@ public class BaseManagementServices {
     @POST
     @Path("lisbon_citizen")
     public IdResult setHome(FirstData data) {
-        slotDB.connect();
-        data.setDate(new DateTime().toString());
-        String id = slotDB.insertUserDetails(data);
-        slotDB.disconnect();
-        return new IdResult(id);
+        return new IdResult(dao.setHome(data));
     }
 
     @GET
     @Path("SOP_data")
     public LayersResult getAllSOP() {
-        try {
-            slotDB.connect();
-            List<FeatureCollection> allSopLayers = slotDB.getAllSOPLayers();
-            slotDB.disconnect();
-            FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(allSopLayers);
-            return new LayersResult("0", joinGeoJson);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new LayersResult("0", null);
-        }
+        return dao.getAllSOP();
     }
 
     @GET
     @Path("SOP_data/{id}")
     public LayersResult getSOPs(@PathParam("id") String id) {
-        try {
-            slotDB.connect();
-            List<FeatureCollection> sopLayers = slotDB.getSOPLayersFromSurvey(id);
-            slotDB.disconnect();
-            FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(sopLayers);
-            return new LayersResult(id, joinGeoJson);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new LayersResult("0", null);
-        }
+       return dao.getSOPs(id);
     }
 
     @POST
     @Path("SOP_data/{id}")
     public IdResult setSOP(@PathParam("id") String id, SOPAreasList data) {
-        try {
-            slotDB.connect();
-            slotDB.addDetails(id, new SOPFiller(data));
-            slotDB.disconnect();
-            return new IdResult(id);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new IdResult("0");
-        }
+        return new IdResult(dao.setSOP(id, data));
     }
 
     @GET
     @Path("SC_data")
     public LayersResult getAllSC() {
-        try {
-            slotDB.connect();
-            List<FeatureCollection> allScLayers = slotDB.getAllSCLayers();
-            slotDB.disconnect();
-            FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(allScLayers);
-            return new LayersResult("0", joinGeoJson);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new LayersResult("0", null);
-        }
+        FeatureCollection features = dao.getAllSC();
+        return new LayersResult(MongoDAO.INVALID_ID, features);
     }
 
     @GET
     @Path("SC_data/{id}")
     public LayersResult getSC(@PathParam("id") String id) {
-        try {
-            slotDB.connect();
-            List<FeatureCollection> scLayers = slotDB.getSCLayersFromSurvey(id);
-            slotDB.disconnect();
-            FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(scLayers);
-            return new LayersResult(id, joinGeoJson);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new LayersResult("0", null);
-        }
+        FeatureCollection features = dao.getSC(id);
+        return new LayersResult(id, features);
     }
 
     @POST
     @Path("SC_data/{id}")
     public IdResult setSC(@PathParam("id") String id, SCAreasList data) {
-        try {
-            slotDB.connect();
-            slotDB.addDetails(id, new SCFiller(data));
-            slotDB.disconnect();
-            return new IdResult(id);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new IdResult("0");
-        }
+        return new IdResult(dao.setSC(id, data));
     }
 
     @GET
     @Path("CE_data")
     public LayersResult getAllCE() {
-        try {
-            slotDB.connect();
-            List<FeatureCollection> allCeLayers = slotDB.getAllCELayers();
-            slotDB.disconnect();
-            FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(allCeLayers);
-            return new LayersResult("0", joinGeoJson);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new LayersResult("0", null);
-        }
+        FeatureCollection features = dao.getAllCE();
+        return new LayersResult(MongoDAO.INVALID_ID, features);
     }
 
     @GET
     @Path("CE_data/{id}")
     public LayersResult getCE(@PathParam("id") String id) {
-        try {
-            slotDB.connect();
-            List<FeatureCollection> ceLayers = slotDB.getCELayersFromSurvey(id);
-            slotDB.disconnect();
-            FeatureCollection joinGeoJson = GeoJsonOperations.joinGeoJson(ceLayers);
-            return new LayersResult(id, joinGeoJson);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new LayersResult("0", null);
-        }
+        FeatureCollection features = dao.getCE(id);
+        return new LayersResult(id, features);
     }
 
     @POST
     @Path("CE_data/{id}")
     public IdResult setCE(@PathParam("id") String id, CEAreasList data) {
-        try {
-            slotDB.connect();
-            slotDB.addDetails(id, new CEFiller(data));
-            slotDB.disconnect();
-            return new IdResult(id);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new IdResult("0");
-        }
+        return new IdResult(dao.setCE(id, data));
     }
 
     @POST
     @Path("finish/{id}")
     public IdResult finish(@PathParam("id") String id, UserDetails userDetails) {
-        try {
-            slotDB.connect();
-            slotDB.addDetails(id, userDetails);
-            slotDB.disconnect();
-            return new IdResult(id);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new IdResult("0");
-        }
+        return new IdResult(dao.finish(id, userDetails));
     }
 
     @POST
     @Path("final_details/{id}")
     public IdResult setFinalDetails(@PathParam("id") String id, LastData finalDetails) {
-        slotDB.connect();
-        slotDB.addDetails(id, finalDetails);
-        slotDB.disconnect();
-        return new IdResult(id);
+        return new IdResult(dao.setFinalDetails(id, finalDetails));
     }
 
     @POST
     @Path("comments/{id}")
     public IdResult setFinalComments(@PathParam("id") String id, FinalComments finalComments) {
-        slotDB.connect();
-        slotDB.addDetails(id, finalComments);
-        slotDB.disconnect();
-        return new IdResult(id);
+        return new IdResult(dao.setFinalComments(id, finalComments));
     }
 
     @GET
     @Path("all")
     @Produces(TEXT_PLAIN)
     public String getItAll() {
-        slotDB.connect();
-        String json = FPGsonBuilder.getNewGson().toJson(slotDB.getEntries());
-        slotDB.disconnect();
-        return json;
+        return dao.getItAll();
     }
 
     @GET
     @Path("geom")
     public LayersResult getAllGeometries() {
-        try {
-            slotDB.connect();
-            List<UserEntry> entries = slotDB.getEntries();
-            FeatureCollection geoJsonJoinEntries = GeoJsonOperations.getGeoJsonJoinEntries(entries);
-            return new LayersResult("0", geoJsonJoinEntries);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-        finally {
-            slotDB.disconnect();
-        }
+        FeatureCollection features = dao.getAllGeometries();
+        return new LayersResult(MongoDAO.INVALID_ID, features);
     }
 
     @GET
     @Path("usergeoms")
     @Produces("application/zip")
     public Response getByUserGeoms() {
-        try {
-            slotDB.connect();
-            List<UserEntry> entries = slotDB.getEntries();
-            HashMap<String, FeatureCollection> usersGeoJsons = GeoJsonOperations.getGeoJsonJoinEntriesPerID(entries);
-            Gson gson = FPGsonBuilder.getNewGson();
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            try(ZipOutputStream zos = new ZipOutputStream(byteArrayOutputStream)) {
-                for (String id : usersGeoJsons.keySet()) {
-                    zos.putNextEntry(new ZipEntry(id + ".txt"));
-                    String json = gson.toJson(usersGeoJsons.get(id));
-                    zos.write(json.getBytes());
-                    zos.closeEntry();
-                }
-            } catch(IOException ioe) {
-                ioe.printStackTrace();
-            }
-
-            return Response.ok(byteArrayOutputStream.toByteArray(), "application/zip")
-                    .header("Content-Disposition", "attachment; filename=\"" + "geoms.zip" + "\"" ) //optional
+        ByteArrayOutputStream byUserGeoms = dao.getByUserGeoms();
+        if (byUserGeoms != null) {
+            return Response.ok(byUserGeoms.toByteArray(), "application/zip")
+                    .header("Content-Disposition", "attachment; filename=\"" + "geoms.zip" + "\"") //optional
                     .build();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Response.serverError().build();
         }
-        finally {
-            slotDB.disconnect();
+        else{
+            return Response.serverError().build();
         }
     }
 

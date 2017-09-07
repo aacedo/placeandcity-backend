@@ -43,4 +43,8 @@ public class LastData implements UserEntryFiller{
         userEntry.setMailUser(mailUser);
         userEntry.setTwitterName(twitterName);
     }
+
+    public static LastData getFromUserEntry(UserEntry ue){
+        return new LastData(ue.getMailUser(), ue.getTwitterName());
+    }
 }

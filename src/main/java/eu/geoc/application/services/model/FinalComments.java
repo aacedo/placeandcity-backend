@@ -54,4 +54,8 @@ public class FinalComments implements UserEntryFiller{
         userEntry.setDm1(dm1);
         userEntry.setComment(comment);
     }
+
+    public static FinalComments getFromUserEntry(UserEntry ue){
+        return new FinalComments(ue.getDi1(), ue.getDm1(), ue.getComment());
+    }
 }

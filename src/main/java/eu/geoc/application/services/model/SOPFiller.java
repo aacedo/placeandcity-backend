@@ -1,5 +1,6 @@
 package eu.geoc.application.services.model;
 
+import eu.geoc.application.model.AreasList;
 import eu.geoc.application.model.BasicArea;
 import eu.geoc.application.model.SOP.SOPAreasList;
 import eu.geoc.application.model.UserEntry;
@@ -25,5 +26,9 @@ public class SOPFiller implements UserEntryFiller{
             area.setId(userEntry.getId() + "SOP" + String.valueOf(++count));
         }
         userEntry.setSOP(SOP);
+    }
+
+    public static SOPAreasList getFromUserEntry(UserEntry ue){
+        return (SOPAreasList) ue.getSOP();
     }
 }

@@ -87,4 +87,9 @@ public class FirstData implements UserEntryFiller{
         userEntry.setProblem(problem);
         userEntry.setDate(date);
     }
+
+    public static FirstData getFromUserEntry(UserEntry ue){
+        return new FirstData(ue.isHome(), ue.getFreguesia(), ue.getHowlong(),
+                ue.getZip(), ue.getProblem(), ue.getDate());
+    }
 }

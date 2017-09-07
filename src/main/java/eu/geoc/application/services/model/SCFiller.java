@@ -1,5 +1,6 @@
 package eu.geoc.application.services.model;
 
+import eu.geoc.application.model.AreasList;
 import eu.geoc.application.model.BasicArea;
 import eu.geoc.application.model.SC.SCArea;
 import eu.geoc.application.model.SC.SCAreasGroup;
@@ -29,5 +30,9 @@ public class SCFiller implements UserEntryFiller{
             }
         }
         userEntry.setSC(SC);
+    }
+
+    public static SCAreasList getFromUserEntry(UserEntry ue){
+        return (SCAreasList) ue.getSC();
     }
 }

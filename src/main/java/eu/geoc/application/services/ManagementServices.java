@@ -1,6 +1,7 @@
 package eu.geoc.application.services;
 
 import eu.geoc.application.persistence.PersistenceBuilder;
+import eu.geoc.application.services.model.MongoDAO;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
@@ -16,7 +17,7 @@ public class ManagementServices extends BaseManagementServices {
 	public ManagementServices() {
 		super();
 		PersistenceBuilder.getInstance().mainInit();
-		this.slotDB = PersistenceBuilder.getInstance().getMongoDatabaseManager();
+		this.dao = new MongoDAO(PersistenceBuilder.getInstance().getMongoDatabaseManager());
 	}
 }
 

@@ -1,5 +1,6 @@
 package eu.geoc.application.services.model;
 
+import eu.geoc.application.model.AreasList;
 import eu.geoc.application.model.BasicArea;
 import eu.geoc.application.model.CE.CEAreasList;
 import eu.geoc.application.model.UserEntry;
@@ -23,5 +24,9 @@ public class CEFiller implements UserEntryFiller{
             area.setId(userEntry.getId() + "CE" + String.valueOf(++count));
         }
         userEntry.setCE(CE);
+    }
+
+    public static CEAreasList getFromUserEntry(UserEntry ue){
+        return (CEAreasList) ue.getCE();
     }
 }

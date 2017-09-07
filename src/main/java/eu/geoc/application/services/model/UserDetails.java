@@ -87,4 +87,9 @@ public class UserDetails implements UserEntryFiller{
         userEntry.setProfession(profession);
         userEntry.setIncome(income);
     }
+
+    public static UserDetails getFromUserEntry(UserEntry ue){
+        return new UserDetails(ue.getGender(),ue.getAge(),ue.getCountry(),
+                ue.getStudy(),ue.getProfession(),ue.getIncome());
+    }
 }
