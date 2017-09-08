@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class SimpleTest {
     public static void main(String[] args) {
         resendAll();
-        resendGeometries();
+        //resendGeometries();
     }
 
     private static void resendAll() {

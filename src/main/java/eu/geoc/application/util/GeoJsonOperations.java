@@ -48,7 +48,7 @@ public class GeoJsonOperations {
     public static final String PORTUGAL_KEY = "Portugal";
     public static final String INCOME_KEY = "Income";
     public static final String PROBLEM_KEY = "Problem";
-    public static final String NAME_KEY = "Name";
+    public static final String NAME_KEY = "NameKey";
 
 
     public static final String USER_TYPE = "user_type";

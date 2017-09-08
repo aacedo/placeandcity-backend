@@ -1,6 +1,5 @@
 package eu.geoc.application.services;
 
-import eu.geoc.application.model.AreasList;
 import eu.geoc.application.model.CE.CEAreasList;
 import eu.geoc.application.model.SC.SCAreasList;
 import eu.geoc.application.model.SOP.SOPAreasList;
@@ -42,18 +41,19 @@ public class PostManagementServices extends BaseManagementServices{
 		for (UserEntry entry : entries) {
 			FirstData firstData = FirstData.getFromUserEntry(entry);
 			String id = dao.setHome(firstData, false);
+			entry.setId(id);
 			SOPAreasList sopAreaList = SOPFiller.getFromUserEntry(entry);
-			dao.setSOP(id, sopAreaList, false);
+			if (sopAreaList != null) {dao.setSOP(id, sopAreaList, false);}
 			SCAreasList scAreasList = SCFiller.getFromUserEntry(entry);
-			dao.setSC(id, scAreasList, false);
+			if (scAreasList != null) {dao.setSC(id, scAreasList, false);}
 			CEAreasList ceAreasList = CEFiller.getFromUserEntry(entry);
-			dao.setCE(id, ceAreasList, false);
+			if (ceAreasList != null) {dao.setCE(id, ceAreasList, false);}
 			UserDetails userDetails = UserDetails.getFromUserEntry(entry);
-			dao.finish(id, userDetails, false);
+			if (userDetails != null) {dao.finish(id, userDetails, false);}
 			LastData lastData = LastData.getFromUserEntry(entry);
-			dao.setFinalDetails(id, lastData, false);
+			if (lastData != null) {dao.setFinalDetails(id, lastData, false);}
 			FinalComments finalComments = FinalComments.getFromUserEntry(entry);
-			dao.setFinalComments(id, finalComments, false);
+			if (finalComments != null) {dao.setFinalComments(id, finalComments, false);}
 		}
 		dao.close();
 		return "OK";

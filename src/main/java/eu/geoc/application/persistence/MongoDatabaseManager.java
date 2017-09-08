@@ -208,7 +208,9 @@ public class MongoDatabaseManager {
 		List<String> records = getRecords(mainCollection, new Document("_id", new ObjectId(id)));
 		Gson gson = getNewGson();
 		UserEntry userEntry = gson.fromJson(records.get(0), UserEntry.class);
+		userEntry.setId(id);
 		filler.fill(userEntry);
+		userEntry.setId(null);
 		Document doc = Document.parse(gson.toJson(userEntry));
 		MongoCollection<Document> collection = this.database.getCollection(mainCollection);
 		collection.findOneAndReplace(eq("_id", new ObjectId(id)), doc);
