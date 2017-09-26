@@ -1,6 +1,6 @@
 # README #
 
-Jersey-based web services for Placeandcity web site.
+Jersey-based web services for www.placeandcity.com web site.
 
 ### What is this repository for? ###
 
