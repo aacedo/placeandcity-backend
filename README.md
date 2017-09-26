@@ -1,6 +1,6 @@
 # README #
 
-Jersey-based web services for Engaging Geographies web site.
+Jersey-based web services for Placeandcity web site.
 
 ### What is this repository for? ###
 
